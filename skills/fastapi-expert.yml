@@ -1,0 +1,18 @@
+name: fastapi-expert
+version: 0.1.0
+description: 'Use when building high-performance async Python APIs with FastAPI and Pydantic V2. Invoke to create REST endpoints, define Pydantic models, implement authentication flows, set up async SQLAlchemy database operations, add JWT authentication, build WebSocket endpoints, or generate OpenAPI documentation. Trigger terms: FastAPI, Pydantic, async Python, Python API, REST API Python, SQLAlchemy async, JWT authentication, OpenAPI, Swagger Python.'
+homepage: https://github.com/Jeffallan/claude-skills
+license: MIT
+authors:
+- Jeffallan
+keywords: []
+compatibility:
+- claude-code
+source:
+  type: git
+  url: https://github.com/Jeffallan/claude-skills
+  ref: main
+  subdir: skills/fastapi-expert
+install:
+  entry: SKILL.md
+  files: []

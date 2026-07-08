@@ -1,0 +1,18 @@
+name: using-superpowers
+version: 0.1.0
+description: Use when starting any conversation - establishes how to find and use skills, requiring skill invocation before ANY response including clarifying questions
+homepage: https://github.com/obra/superpowers
+license: MIT
+authors:
+- obra
+keywords: []
+compatibility:
+- claude-code
+source:
+  type: git
+  url: https://github.com/obra/superpowers
+  ref: main
+  subdir: skills/using-superpowers
+install:
+  entry: SKILL.md
+  files: []

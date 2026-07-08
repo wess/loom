@@ -1,0 +1,18 @@
+name: public-relations
+version: 0.1.0
+description: When the user wants help with public relations, earned media, press coverage, journalist outreach, or media strategy (not pull requests). Also use when the user mentions 'PR,' 'public relations,' 'press,' 'press release,' 'press coverage,' 'media outreach,' 'pitch a journalist,' 'get featured,' 'media list,' 'media kit,' 'press kit,' 'newsjacking,' 'news hijack,' 'HARO,' 'Qwoted,' 'Featured,' 'Help A Reporter,' 'reporter request,' 'tech press,' 'TechCrunch,' 'earned media,' 'thought leadership placement,' 'op-ed,' 'guest article,' 'press contacts,' or 'how do I get press.' Use this for earned media work — finding journalists, pitching stories, newsjacking, and responding to press requests. For startup/SaaS/AI directory submissions, see directory-submissions. For product launches, see launch. For social-media engagement, see social. For cold-email outreach to prospects, see cold-email.
+homepage: https://github.com/coreyhaines31/marketingskills
+license: MIT
+authors:
+- coreyhaines31
+keywords: []
+compatibility:
+- claude-code
+source:
+  type: git
+  url: https://github.com/coreyhaines31/marketingskills
+  ref: main
+  subdir: skills/public-relations
+install:
+  entry: SKILL.md
+  files: []

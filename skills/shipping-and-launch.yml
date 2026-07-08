@@ -1,0 +1,18 @@
+name: shipping-and-launch
+version: 0.1.0
+description: Prepares production launches. Use when preparing to deploy to production. Use when you need a pre-launch checklist, when setting up monitoring, when planning a staged rollout, or when you need a rollback strategy.
+homepage: https://github.com/addyosmani/agent-skills
+license: MIT
+authors:
+- addyosmani
+keywords: []
+compatibility:
+- claude-code
+source:
+  type: git
+  url: https://github.com/addyosmani/agent-skills
+  ref: main
+  subdir: skills/shipping-and-launch
+install:
+  entry: SKILL.md
+  files: []

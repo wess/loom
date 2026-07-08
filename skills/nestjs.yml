@@ -1,0 +1,21 @@
+name: nestjs
+version: 0.1.0
+description: |-
+  NestJS is a progressive TypeScript framework for building scalable server-side
+  applications on Node.js. It uses decorators, modules, dependency injection, and
+  an opinionated architecture inspired by Angular.
+homepage: https://github.com/TerminalSkills/skills
+license: Apache-2.0
+authors:
+- TerminalSkills
+keywords: []
+compatibility:
+- claude-code
+source:
+  type: git
+  url: https://github.com/TerminalSkills/skills
+  ref: main
+  subdir: skills/nestjs
+install:
+  entry: SKILL.md
+  files: []

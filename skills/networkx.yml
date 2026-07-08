@@ -1,0 +1,18 @@
+name: networkx
+version: 0.1.0
+description: Create, analyze, and visualize complex networks and graphs in Python with NetworkX. Use when working with network/graph data structures, computing graph algorithms (shortest paths, centrality, clustering), detecting communities, generating synthetic networks (random, scale-free, small-world), reading/writing graph file formats, or drawing network topologies. Common applications include social, biological, transportation, and citation networks.
+homepage: https://github.com/K-Dense-AI/scientific-agent-skills
+license: MIT
+authors:
+- K-Dense-AI
+keywords: []
+compatibility:
+- claude-code
+source:
+  type: git
+  url: https://github.com/K-Dense-AI/scientific-agent-skills
+  ref: main
+  subdir: skills/networkx
+install:
+  entry: SKILL.md
+  files: []

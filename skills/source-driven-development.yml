@@ -1,0 +1,18 @@
+name: source-driven-development
+version: 0.1.0
+description: Grounds every implementation decision in official documentation. Use when you want authoritative, source-cited code free from outdated patterns. Use when building with any framework or library where correctness matters.
+homepage: https://github.com/addyosmani/agent-skills
+license: MIT
+authors:
+- addyosmani
+keywords: []
+compatibility:
+- claude-code
+source:
+  type: git
+  url: https://github.com/addyosmani/agent-skills
+  ref: main
+  subdir: skills/source-driven-development
+install:
+  entry: SKILL.md
+  files: []

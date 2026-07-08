@@ -1,0 +1,18 @@
+name: symfony
+version: 0.1.0
+description: You are an expert in Symfony, the enterprise PHP framework for building web applications and APIs. You help developers build production systems with Symfony's component architecture, Doctrine ORM, dependency injection, event system, security component, API Platform for REST/GraphQL, and Messenger for async processing — the backbone of enterprise PHP used by companies processing billions of requests.
+homepage: https://github.com/TerminalSkills/skills
+license: Apache-2.0
+authors:
+- TerminalSkills
+keywords: []
+compatibility:
+- claude-code
+source:
+  type: git
+  url: https://github.com/TerminalSkills/skills
+  ref: main
+  subdir: skills/symfony
+install:
+  entry: SKILL.md
+  files: []

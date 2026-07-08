@@ -1,0 +1,18 @@
+name: pytest
+version: 0.1.0
+description: Test Python code with pytest. Use when a user asks to write unit tests, set up test fixtures, mock dependencies, run async tests, measure coverage, or implement test-driven development in Python.
+homepage: https://github.com/TerminalSkills/skills
+license: Apache-2.0
+authors:
+- TerminalSkills
+keywords: []
+compatibility:
+- claude-code
+source:
+  type: git
+  url: https://github.com/TerminalSkills/skills
+  ref: main
+  subdir: skills/pytest
+install:
+  entry: SKILL.md
+  files: []

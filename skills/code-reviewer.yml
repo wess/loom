@@ -1,0 +1,18 @@
+name: code-reviewer
+version: 0.1.0
+description: Analyzes code diffs and files to identify bugs, security vulnerabilities (SQL injection, XSS, insecure deserialization), code smells, N+1 queries, naming issues, and architectural concerns, then produces a structured review report with prioritized, actionable feedback. Use when reviewing pull requests, conducting code quality audits, identifying refactoring opportunities, or checking for security issues. Invoke for PR reviews, code quality checks, refactoring suggestions, review code, code quality. Complements specialized skills (security-reviewer, test-master) by providing broad-scope review across correctness, performance, maintainability, and test coverage in a single pass.
+homepage: https://github.com/Jeffallan/claude-skills
+license: MIT
+authors:
+- Jeffallan
+keywords: []
+compatibility:
+- claude-code
+source:
+  type: git
+  url: https://github.com/Jeffallan/claude-skills
+  ref: main
+  subdir: skills/code-reviewer
+install:
+  entry: SKILL.md
+  files: []

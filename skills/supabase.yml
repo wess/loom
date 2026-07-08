@@ -1,0 +1,18 @@
+name: supabase
+version: 0.1.0
+description: Build applications with Supabase as the backend — Postgres database, authentication, real-time subscriptions, storage, and edge functions. Use when someone asks to "set up Supabase", "add authentication", "create a real-time app", "set up row-level security", "configure Supabase storage", "write edge functions", or "migrate from Firebase to Supabase". Covers project setup, schema design with RLS, auth flows, real-time subscriptions, file storage, and edge functions.
+homepage: https://github.com/TerminalSkills/skills
+license: Apache-2.0
+authors:
+- TerminalSkills
+keywords: []
+compatibility:
+- claude-code
+source:
+  type: git
+  url: https://github.com/TerminalSkills/skills
+  ref: main
+  subdir: skills/supabase
+install:
+  entry: SKILL.md
+  files: []

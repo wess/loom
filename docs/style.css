@@ -324,6 +324,20 @@ pre {
 .btn--ghost:hover {
   background: var(--bg-subtle);
 }
+.btn--sm {
+  font-size: 13px;
+  padding: 8px 14px;
+  border-radius: var(--radius-sm);
+}
+.btn svg {
+  width: 15px;
+  height: 15px;
+}
+/* Shared copy feedback for full-size buttons. */
+.btn.is-copied {
+  color: var(--accent);
+  border-color: var(--accent);
+}
 
 /* ----- Hero -------------------------------------------------------------- */
 .hero {
@@ -372,7 +386,53 @@ pre {
 .hero__inner {
   position: relative;
   z-index: 1;
-  max-width: 760px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+  align-items: center;
+  gap: 48px;
+}
+
+.hero__col {
+  min-width: 0;
+  max-width: 620px;
+}
+
+/* Framed, elevated demo terminal */
+.hero__demo {
+  min-width: 0;
+}
+.hero__demo-img {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  background: #0d1117;
+}
+
+.hero__stat {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--text-muted);
+  margin: 0 0 24px;
+}
+.hero__stat:empty {
+  margin: 0;
+}
+
+@media (max-width: 900px) {
+  .hero__inner {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+  .hero__col {
+    max-width: 620px;
+  }
+  .hero__demo {
+    max-width: 620px;
+  }
 }
 
 .hero h1 {
@@ -791,6 +851,12 @@ td code {
 }
 .deflist a:hover {
   text-decoration: underline;
+}
+.modal__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 16px;
 }
 
 /* ----- How it works ------------------------------------------------------ */

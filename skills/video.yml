@@ -1,0 +1,18 @@
+name: video
+version: 0.1.0
+description: When the user wants to create, generate, or produce video content using AI tools or programmatic frameworks. Also use when the user mentions 'video production,' 'AI video,' 'Remotion,' 'Hyperframes,' 'HeyGen,' 'Synthesia,' 'Veo,' 'Sora,' 'Runway,' 'Kling,' 'Seedance,' 'Hailuo,' 'MiniMax,' 'Pika,' 'Hunyuan,' 'Wan,' 'video generation,' 'AI avatar,' 'talking head video,' 'programmatic video,' 'video template,' 'explainer video,' 'product demo video,' 'video pipeline,' or 'make me a video.' Use this for video creation, generation, and production workflows. For video content strategy and what to post, see social. For paid video ad creative, see ad-creative.
+homepage: https://github.com/coreyhaines31/marketingskills
+license: MIT
+authors:
+- coreyhaines31
+keywords: []
+compatibility:
+- claude-code
+source:
+  type: git
+  url: https://github.com/coreyhaines31/marketingskills
+  ref: main
+  subdir: skills/video
+install:
+  entry: SKILL.md
+  files: []

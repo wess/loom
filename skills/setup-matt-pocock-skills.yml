@@ -1,0 +1,18 @@
+name: setup-matt-pocock-skills
+version: 0.1.0
+description: Configure this repo for the engineering skills — set up its issue tracker, triage label vocabulary, and domain doc layout. Run once before first use of the other engineering skills.
+homepage: https://github.com/mattpocock/skills
+license: MIT
+authors:
+- mattpocock
+keywords: []
+compatibility:
+- claude-code
+source:
+  type: git
+  url: https://github.com/mattpocock/skills
+  ref: main
+  subdir: skills/engineering/setup-matt-pocock-skills
+install:
+  entry: SKILL.md
+  files: []

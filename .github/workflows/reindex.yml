@@ -1,0 +1,55 @@
+name: reindex
+
+# When a skill manifest lands on main, rebuild the website's search index
+# (docs/skills.json) and commit it back. Contributors never regenerate it by
+# hand — merging a manifest is enough for the site to know about the package.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "skills/**"
+
+# Serialize runs so two quick merges can't race on the committed index.
+concurrency:
+  group: reindex
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  reindex:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Cache cargo
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            target
+          key: cargo-${{ hashFiles('Cargo.lock') }}
+
+      - name: Build
+        run: cargo build --release
+
+      - name: Rebuild the search index
+        env:
+          LOOM_HOME: ${{ runner.temp }}/loom
+        run: cargo run --release -- index --out docs/skills.json
+
+      - name: Commit the index if it changed
+        run: |
+          if git diff --quiet -- docs/skills.json; then
+            echo "index already current; nothing to commit"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/skills.json
+          # [skip ci] keeps this docs-only commit from re-triggering the pipeline.
+          git commit -m "chore: rebuild search index [skip ci]"
+          git push

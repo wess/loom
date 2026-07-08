@@ -1,0 +1,18 @@
+name: hotwire
+version: 0.1.0
+description: You are an expert in Hotwire (HTML Over The Wire), the collection of techniques for building modern web applications by sending HTML instead of JSON. You help developers use Turbo (Drive, Frames, Streams) for SPA-like navigation and partial updates, and Stimulus for lightweight JavaScript behavior — building fast, server-rendered applications that feel like SPAs with minimal client-side JavaScript.
+homepage: https://github.com/TerminalSkills/skills
+license: Apache-2.0
+authors:
+- TerminalSkills
+keywords: []
+compatibility:
+- claude-code
+source:
+  type: git
+  url: https://github.com/TerminalSkills/skills
+  ref: main
+  subdir: skills/hotwire
+install:
+  entry: SKILL.md
+  files: []

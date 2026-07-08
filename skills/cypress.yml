@@ -1,0 +1,18 @@
+name: cypress
+version: 0.1.0
+description: 'Assists with end-to-end testing of web applications using Cypress. Use when writing E2E tests, setting up component testing, configuring CI pipelines with parallelization, or building custom test commands. Trigger words: cypress, e2e testing, end-to-end, cypress run, cy.get, integration testing, browser testing.'
+homepage: https://github.com/TerminalSkills/skills
+license: Apache-2.0
+authors:
+- TerminalSkills
+keywords: []
+compatibility:
+- claude-code
+source:
+  type: git
+  url: https://github.com/TerminalSkills/skills
+  ref: main
+  subdir: skills/cypress
+install:
+  entry: SKILL.md
+  files: []

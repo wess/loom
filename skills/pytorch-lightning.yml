@@ -1,0 +1,18 @@
+name: pytorch-lightning
+version: 0.1.0
+description: Deep learning framework (PyTorch Lightning / lightning package). Organize PyTorch code into LightningModules, configure Trainers for multi-GPU/TPU, implement data pipelines, callbacks, logging (W&B, TensorBoard, MLflow), distributed training (DDP, FSDP, DeepSpeed), for scalable neural network training.
+homepage: https://github.com/K-Dense-AI/scientific-agent-skills
+license: MIT
+authors:
+- K-Dense-AI
+keywords: []
+compatibility:
+- claude-code
+source:
+  type: git
+  url: https://github.com/K-Dense-AI/scientific-agent-skills
+  ref: main
+  subdir: skills/pytorch-lightning
+install:
+  entry: SKILL.md
+  files: []

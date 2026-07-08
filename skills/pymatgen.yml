@@ -1,0 +1,18 @@
+name: pymatgen
+version: 0.1.0
+description: Materials science toolkit. Crystal structures (CIF, POSCAR), phase diagrams, band structure, DOS, Materials Project integration, format conversion, for computational materials science.
+homepage: https://github.com/K-Dense-AI/scientific-agent-skills
+license: MIT
+authors:
+- K-Dense-AI
+keywords: []
+compatibility:
+- claude-code
+source:
+  type: git
+  url: https://github.com/K-Dense-AI/scientific-agent-skills
+  ref: main
+  subdir: skills/pymatgen
+install:
+  entry: SKILL.md
+  files: []

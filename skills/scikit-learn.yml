@@ -1,0 +1,18 @@
+name: scikit-learn
+version: 0.1.0
+description: Machine learning in Python with scikit-learn. Use when working with supervised learning (classification, regression), unsupervised learning (clustering, dimensionality reduction), model evaluation, hyperparameter tuning, preprocessing, or building ML pipelines. Provides comprehensive reference documentation for algorithms, preprocessing techniques, pipelines, and best practices.
+homepage: https://github.com/K-Dense-AI/scientific-agent-skills
+license: MIT
+authors:
+- K-Dense-AI
+keywords: []
+compatibility:
+- claude-code
+source:
+  type: git
+  url: https://github.com/K-Dense-AI/scientific-agent-skills
+  ref: main
+  subdir: skills/scikit-learn
+install:
+  entry: SKILL.md
+  files: []

@@ -1,0 +1,18 @@
+name: product-marketing
+version: 0.1.0
+description: When the user wants to create or update their product marketing context document. Also use when the user mentions 'product context,' 'marketing context,' 'set up context,' 'positioning,' 'who is my target audience,' 'describe my product,' 'ICP,' 'ideal customer profile,' or wants to avoid repeating foundational information across marketing tasks. Use this at the start of any new project before using other marketing skills — it creates `.agents/product-marketing.md` that all other skills reference for product, audience, and positioning context.
+homepage: https://github.com/coreyhaines31/marketingskills
+license: MIT
+authors:
+- coreyhaines31
+keywords: []
+compatibility:
+- claude-code
+source:
+  type: git
+  url: https://github.com/coreyhaines31/marketingskills
+  ref: main
+  subdir: skills/product-marketing
+install:
+  entry: SKILL.md
+  files: []

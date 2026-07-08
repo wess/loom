@@ -1,0 +1,18 @@
+name: sveltekit
+version: 0.1.0
+description: 'Assists with building full-stack web applications using SvelteKit. Use when creating Svelte apps with file-based routing, server-side rendering, form actions, or API endpoints. Trigger words: sveltekit, svelte, svelte routing, form actions, svelte hooks, svelte adapter, svelte load function.'
+homepage: https://github.com/TerminalSkills/skills
+license: Apache-2.0
+authors:
+- TerminalSkills
+keywords: []
+compatibility:
+- claude-code
+source:
+  type: git
+  url: https://github.com/TerminalSkills/skills
+  ref: main
+  subdir: skills/sveltekit
+install:
+  entry: SKILL.md
+  files: []

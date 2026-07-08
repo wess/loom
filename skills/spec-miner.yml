@@ -1,0 +1,18 @@
+name: spec-miner
+version: 0.1.0
+description: 'Reverse-engineering specialist that extracts specifications from existing codebases. Use when working with legacy or undocumented systems, inherited projects, or old codebases with no documentation. Invoke to map code dependencies, generate API documentation from source, identify undocumented business logic, figure out what code does, or create architecture documentation from implementation. Trigger phrases: reverse engineer, old codebase, no docs, no documentation, figure out how this works, inherited project, legacy analysis, code archaeology, undocumented features.'
+homepage: https://github.com/Jeffallan/claude-skills
+license: MIT
+authors:
+- Jeffallan
+keywords: []
+compatibility:
+- claude-code
+source:
+  type: git
+  url: https://github.com/Jeffallan/claude-skills
+  ref: main
+  subdir: skills/spec-miner
+install:
+  entry: SKILL.md
+  files: []

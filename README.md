@@ -8,7 +8,11 @@ Loom installs, inspects, and authors reusable skills for AI agents —
 Claude Code, Codex, Cursor, and anything else that loads a skills folder.
 Manifests describe how to fetch a skill; Loom weaves them into place.
 
-[Browse skills](https://loomskills.dev) · [Documentation](https://loomskills.dev/docs.html) · [Author a skill](#authoring-a-skill)
+[Browse skills](https://wess.io/loom) · [Documentation](https://wess.io/loom/docs.html) · [Author a skill](#authoring-a-skill)
+
+<br>
+
+<img src="docs/demo.svg" alt="loom search pdf, then loom install pdf installing the skill into the Claude Code skills folder" width="720">
 
 </div>
 
@@ -44,7 +48,7 @@ Loom is a single Rust binary.
 
 ```sh
 # from source
-git clone https://github.com/loomskills/loom
+git clone https://github.com/wess/loom
 cd loom
 cargo install --path .
 
@@ -84,6 +88,8 @@ By default skills install into the **Claude Code** skills folder
 | `loom update` | Clone/pull the skill repository from its configured remote. |
 | `loom upgrade [skill] [--agent]` | Reinstall installed skills whose repo version has moved on. |
 | `loom new <name> [--out]` | Scaffold a new manifest to author from. |
+| `loom init [--url] [--ref] [--out]` | Author a manifest interactively; `--url` imports defaults by inspecting a repo. |
+| `loom publish <skill> [--repo] [--execute]` | Open a PR adding a manifest to the repository (prints the plan unless `--execute`). |
 | `loom lint [path]` | Validate one manifest, or every manifest in the repo. |
 | `loom test <skill>` | Fetch and stage a skill in a scratch dir to prove the manifest resolves — without touching any agent. |
 | `loom generate <url> [--ref] [--out]` | Inspect a skills repo URL and synthesize a manifest per discovered skill (alias: `create`; URL may also be passed as `--url`). |
@@ -150,8 +156,8 @@ You publish a skill by adding a manifest to the [`skills/`](skills) folder — y
 upload the skill payload here, only the recipe.
 
 ```sh
-# 1. scaffold a manifest
-loom new my-skill
+# 1. author a manifest interactively (or `loom new my-skill` for a bare template)
+loom init
 
 # 2. edit skills/my-skill.yml — point source.url / source.subdir at your repo
 
@@ -162,7 +168,13 @@ loom lint skills/my-skill.yml
 loom test my-skill
 
 # 5. open a pull request adding skills/my-skill.yml
+loom publish my-skill --execute
 ```
+
+`loom init` walks you through every field, validates as you go, and can pre-fill
+answers by inspecting an existing repo (`loom init --url https://github.com/you/skills`).
+`loom publish` forks the repository, commits your manifest to a branch, and opens
+the PR with `gh` — run it without `--execute` first to see exactly what it will do.
 
 ### Already have a repo full of skills?
 

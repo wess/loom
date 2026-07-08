@@ -1,0 +1,18 @@
+name: rag-architect
+version: 0.1.0
+description: Designs and implements production-grade RAG systems by chunking documents, generating embeddings, configuring vector stores, building hybrid search pipelines, applying reranking, and evaluating retrieval quality. Use when building RAG systems, vector databases, or knowledge-grounded AI applications requiring semantic search, document retrieval, context augmentation, similarity search, or embedding-based indexing.
+homepage: https://github.com/Jeffallan/claude-skills
+license: MIT
+authors:
+- Jeffallan
+keywords: []
+compatibility:
+- claude-code
+source:
+  type: git
+  url: https://github.com/Jeffallan/claude-skills
+  ref: main
+  subdir: skills/rag-architect
+install:
+  entry: SKILL.md
+  files: []

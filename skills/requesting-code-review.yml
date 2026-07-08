@@ -1,0 +1,18 @@
+name: requesting-code-review
+version: 0.1.0
+description: Use when completing tasks, implementing major features, or before merging to verify work meets requirements
+homepage: https://github.com/obra/superpowers
+license: MIT
+authors:
+- obra
+keywords: []
+compatibility:
+- claude-code
+source:
+  type: git
+  url: https://github.com/obra/superpowers
+  ref: main
+  subdir: skills/requesting-code-review
+install:
+  entry: SKILL.md
+  files: []

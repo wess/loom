@@ -1,0 +1,21 @@
+name: huggingface
+version: 0.1.0
+description: |-
+  Work with Hugging Face's ecosystem for machine learning — transformers library, model hub,
+  tokenizers, inference pipelines, and fine-tuning. Covers downloading pre-trained models,
+  running inference, training custom models, and publishing to the Hub.
+homepage: https://github.com/TerminalSkills/skills
+license: Apache-2.0
+authors:
+- TerminalSkills
+keywords: []
+compatibility:
+- claude-code
+source:
+  type: git
+  url: https://github.com/TerminalSkills/skills
+  ref: main
+  subdir: skills/huggingface
+install:
+  entry: SKILL.md
+  files: []

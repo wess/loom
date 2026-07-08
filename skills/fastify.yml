@@ -1,0 +1,21 @@
+name: fastify
+version: 0.1.0
+description: |-
+  Fastify is a high-performance Node.js web framework focused on developer experience
+  and low overhead. It features JSON Schema validation, a powerful plugin system,
+  lifecycle hooks, and automatic serialization for blazing-fast APIs.
+homepage: https://github.com/TerminalSkills/skills
+license: Apache-2.0
+authors:
+- TerminalSkills
+keywords: []
+compatibility:
+- claude-code
+source:
+  type: git
+  url: https://github.com/TerminalSkills/skills
+  ref: main
+  subdir: skills/fastify
+install:
+  entry: SKILL.md
+  files: []

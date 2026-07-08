@@ -1,0 +1,73 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 400" width="760" height="400" role="img" aria-label="Terminal demo: loom search pdf, then loom install pdf, which installs the skill into the Claude Code skills folder.">
+  <title>loom — search and install a skill</title>
+  <defs>
+    <style>
+      .win { fill: #0d1117; }
+      .bar { fill: #161b22; }
+      .txt { font-family: ui-monospace, "SF Mono", "Menlo", "Consolas", monospace; font-size: 16px; }
+      .prompt { fill: #7ee787; }
+      .cmd { fill: #e6edf3; }
+      .name { fill: #ffb454; }
+      .ver { fill: #6e7681; }
+      .desc { fill: #8b949e; }
+      .step { fill: #79c0ff; }
+      .ok { fill: #7ee787; }
+      .cur { fill: #e6edf3; }
+
+      /* Each line fades in at its moment and holds until the loop resets. */
+      .l { opacity: 0; }
+      .l1 { animation: r1 13s infinite; }
+      .l2 { animation: r2 13s infinite; }
+      .l3 { animation: r3 13s infinite; }
+      .l4 { animation: r4 13s infinite; }
+      .l5 { animation: r5 13s infinite; }
+      .l6 { animation: r6 13s infinite; }
+      .l7 { animation: r7 13s infinite; }
+      .l8 { animation: r8 13s infinite; }
+
+      @keyframes r1 { 0%,3%{opacity:0} 5%,96%{opacity:1} 100%{opacity:0} }
+      @keyframes r2 { 0%,10%{opacity:0} 12%,96%{opacity:1} 100%{opacity:0} }
+      @keyframes r3 { 0%,13%{opacity:0} 15%,96%{opacity:1} 100%{opacity:0} }
+      @keyframes r4 { 0%,16%{opacity:0} 18%,96%{opacity:1} 100%{opacity:0} }
+      @keyframes r5 { 0%,19%{opacity:0} 21%,96%{opacity:1} 100%{opacity:0} }
+      @keyframes r6 { 0%,36%{opacity:0} 38%,96%{opacity:1} 100%{opacity:0} }
+      @keyframes r7 { 0%,50%{opacity:0} 52%,96%{opacity:1} 100%{opacity:0} }
+      @keyframes r8 { 0%,64%{opacity:0} 66%,96%{opacity:1} 100%{opacity:0} }
+
+      .cursor { animation: blink 1.05s steps(1) infinite; }
+      @keyframes blink { 0%,50%{opacity:1} 50.01%,100%{opacity:0} }
+
+      @media (prefers-reduced-motion: reduce) {
+        .l { opacity: 1; animation: none; }
+        .cursor { animation: none; opacity: 0; }
+      }
+    </style>
+  </defs>
+
+  <!-- window -->
+  <rect class="win" x="1" y="1" width="758" height="398" rx="12"/>
+  <rect class="bar" x="1" y="1" width="758" height="40" rx="12"/>
+  <rect class="bar" x="1" y="24" width="758" height="17"/>
+  <circle cx="26" cy="21" r="6" fill="#ff5f56"/>
+  <circle cx="48" cy="21" r="6" fill="#ffbd2e"/>
+  <circle cx="70" cy="21" r="6" fill="#27c93f"/>
+  <text x="380" y="26" text-anchor="middle" class="txt" fill="#6e7681" font-size="13">loom — a package manager for AI skills</text>
+
+  <!-- content -->
+  <g class="txt">
+    <!-- search -->
+    <text class="l l1" x="28" y="92"><tspan class="prompt">$ </tspan><tspan class="cmd">loom search pdf</tspan></text>
+    <text class="l l2" x="28" y="122"><tspan class="name">pdf </tspan><tspan class="ver">1.0.0</tspan></text>
+    <text class="l l3" x="52" y="146"><tspan class="desc">Read, fill, split, and generate PDF documents.</tspan></text>
+    <text class="l l4" x="28" y="176"><tspan class="name">docx </tspan><tspan class="ver">1.0.0</tspan></text>
+    <text class="l l5" x="52" y="200"><tspan class="desc">Create and edit Word documents with templates.</tspan></text>
+
+    <!-- install -->
+    <text class="l l6" x="28" y="250"><tspan class="prompt">$ </tspan><tspan class="cmd">loom install pdf</tspan></text>
+    <text class="l l7" x="28" y="284"><tspan class="step">==&gt; </tspan><tspan class="cmd">Installing pdf 1.0.0 for Claude Code</tspan></text>
+    <text class="l l8" x="28" y="314"><tspan class="ok">✓ </tspan><tspan class="cmd">Installed to ~/.claude/skills/pdf</tspan></text>
+
+    <!-- resting cursor -->
+    <text x="28" y="348"><tspan class="prompt">$ </tspan><tspan class="cur cursor">▋</tspan></text>
+  </g>
+</svg>

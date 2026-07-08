@@ -1,0 +1,18 @@
+name: wizard
+version: 0.1.0
+description: Generate an interactive bash wizard that walks a human through a manual procedure — third-party setup, a one-off migration, an A→B state transition — opening URLs, capturing values, confirming each step, and writing .env files and GitHub Actions secrets.
+homepage: https://github.com/mattpocock/skills
+license: MIT
+authors:
+- mattpocock
+keywords: []
+compatibility:
+- claude-code
+source:
+  type: git
+  url: https://github.com/mattpocock/skills
+  ref: main
+  subdir: skills/in-progress/wizard
+install:
+  entry: SKILL.md
+  files: []

@@ -1,0 +1,18 @@
+name: kafka
+version: 0.1.0
+description: Build event-driven systems with Apache Kafka. Use when a user asks to set up message streaming, implement event sourcing, build pub/sub systems, process real-time data streams, or connect microservices with async messaging.
+homepage: https://github.com/TerminalSkills/skills
+license: Apache-2.0
+authors:
+- TerminalSkills
+keywords: []
+compatibility:
+- claude-code
+source:
+  type: git
+  url: https://github.com/TerminalSkills/skills
+  ref: main
+  subdir: skills/kafka
+install:
+  entry: SKILL.md
+  files: []

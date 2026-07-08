@@ -1,0 +1,18 @@
+name: telegram-bot-builder
+version: 0.1.0
+description: 'Builds Telegram bots using the Bot API (grammy/telegraf/python-telegram-bot). Use when the user wants to create a Telegram bot, handle commands, build inline keyboards, process callbacks, send media, build conversational flows, handle payments, or create mini apps. Trigger words: telegram bot, telegram integration, telegram commands, inline keyboard, telegram webhook, telegram polling, telegram mini app, telegram payments, BotFather, grammy, telegraf.'
+homepage: https://github.com/TerminalSkills/skills
+license: Apache-2.0
+authors:
+- TerminalSkills
+keywords: []
+compatibility:
+- claude-code
+source:
+  type: git
+  url: https://github.com/TerminalSkills/skills
+  ref: main
+  subdir: skills/telegram-bot-builder
+install:
+  entry: SKILL.md
+  files: []

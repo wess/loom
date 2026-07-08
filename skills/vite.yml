@@ -1,0 +1,18 @@
+name: vite
+version: 0.1.0
+description: 'Assists with configuring and using Vite as a frontend build tool for modern web applications. Use when setting up dev servers, optimizing production builds, configuring plugins, migrating from Webpack or CRA, or building component libraries. Trigger words: vite, build tool, HMR, hot module replacement, vite config, rollup, bundling.'
+homepage: https://github.com/TerminalSkills/skills
+license: Apache-2.0
+authors:
+- TerminalSkills
+keywords: []
+compatibility:
+- claude-code
+source:
+  type: git
+  url: https://github.com/TerminalSkills/skills
+  ref: main
+  subdir: skills/vite
+install:
+  entry: SKILL.md
+  files: []

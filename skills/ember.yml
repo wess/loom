@@ -1,0 +1,18 @@
+name: ember
+version: 0.1.0
+description: You are an expert in Ember.js, the opinionated frontend framework for ambitious web applications. You help developers build large-scale SPAs with Ember's convention-over-configuration approach, Glimmer components, tracked properties, Ember Data for data management, routing with nested layouts, services for shared state, and ember-cli for scaffolding — providing Rails-like productivity for frontend development.
+homepage: https://github.com/TerminalSkills/skills
+license: Apache-2.0
+authors:
+- TerminalSkills
+keywords: []
+compatibility:
+- claude-code
+source:
+  type: git
+  url: https://github.com/TerminalSkills/skills
+  ref: main
+  subdir: skills/ember
+install:
+  entry: SKILL.md
+  files: []

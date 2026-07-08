@@ -1,0 +1,18 @@
+name: triage
+version: 0.1.0
+description: Move issues and external PRs through a state machine of triage roles — categorise, verify, grill if needed, and write agent-ready briefs.
+homepage: https://github.com/mattpocock/skills
+license: MIT
+authors:
+- mattpocock
+keywords: []
+compatibility:
+- claude-code
+source:
+  type: git
+  url: https://github.com/mattpocock/skills
+  ref: main
+  subdir: skills/engineering/triage
+install:
+  entry: SKILL.md
+  files: []

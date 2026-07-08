@@ -43,7 +43,7 @@ pub fn run(name: &str, out: Option<&str>) -> Result<()> {
     }
 
     let header = format!(
-        "# {name} — Loom skill manifest\n# Docs: https://loomskills.dev/docs/manifest\n\n"
+        "# {name} — Loom skill manifest\n# Docs: https://wess.io/loom/docs.html\n\n"
     );
     std::fs::write(&path, format!("{header}{}", manifest.to_yaml()?))?;
 

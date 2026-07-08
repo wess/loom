@@ -62,6 +62,29 @@ pub enum Command {
         #[arg(short, long)]
         out: Option<String>,
     },
+    /// Author a manifest interactively, optionally importing from a repo.
+    Init {
+        /// Import field defaults by inspecting this skills repo URL.
+        #[arg(long = "url", value_name = "URL")]
+        url: Option<String>,
+        /// Ref (tag/branch) to pin when importing.
+        #[arg(short, long)]
+        r#ref: Option<String>,
+        /// Where to write the manifest (defaults to the repo's skills folder).
+        #[arg(short, long)]
+        out: Option<String>,
+    },
+    /// Open a pull request adding a skill's manifest to the repository.
+    Publish {
+        /// Skill name (from the repo's skills folder) or a path to a manifest.
+        skill: String,
+        /// Upstream repository to open the PR against (defaults to configured repo_url).
+        #[arg(long)]
+        repo: Option<String>,
+        /// Actually fork, push, and open the PR. Without this, prints the plan only.
+        #[arg(long)]
+        execute: bool,
+    },
     /// Validate one manifest file, or every manifest in the repo.
     Lint {
         /// A manifest file; omit to lint the whole repo.
@@ -114,6 +137,12 @@ pub fn run() -> Result<()> {
             commands::upgrade::run(skill.as_deref(), agent.as_deref())
         }
         Command::New { name, out } => commands::new::run(&name, out.as_deref()),
+        Command::Init { url, r#ref, out } => {
+            commands::init::run(url.as_deref(), r#ref.as_deref(), out.as_deref())
+        }
+        Command::Publish { skill, repo, execute } => {
+            commands::publish::run(&skill, repo.as_deref(), execute)
+        }
         Command::Lint { path } => commands::lint::run(path.as_deref()),
         Command::Test { skill } => commands::test::run(&skill),
         Command::Generate { url, url_flag, r#ref, out } => {

@@ -1,0 +1,18 @@
+name: pytorch
+version: 0.1.0
+description: 'Assists with building, training, and deploying neural networks using PyTorch. Use when designing architectures for computer vision, NLP, or tabular data, optimizing training with mixed precision and distributed strategies, or exporting models for production inference. Trigger words: pytorch, torch, neural network, deep learning, training loop, cuda.'
+homepage: https://github.com/TerminalSkills/skills
+license: Apache-2.0
+authors:
+- TerminalSkills
+keywords: []
+compatibility:
+- claude-code
+source:
+  type: git
+  url: https://github.com/TerminalSkills/skills
+  ref: main
+  subdir: skills/pytorch
+install:
+  entry: SKILL.md
+  files: []

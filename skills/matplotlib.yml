@@ -1,0 +1,18 @@
+name: matplotlib
+version: 0.1.0
+description: Low-level plotting library for full customization. Use when you need fine-grained control over every plot element, creating novel plot types, or integrating with specific scientific workflows. Export to PNG/PDF/SVG for publication. For quick statistical plots use seaborn; for interactive plots use plotly; for publication-ready multi-panel figures with journal styling, use scientific-visualization.
+homepage: https://github.com/K-Dense-AI/scientific-agent-skills
+license: MIT
+authors:
+- K-Dense-AI
+keywords: []
+compatibility:
+- claude-code
+source:
+  type: git
+  url: https://github.com/K-Dense-AI/scientific-agent-skills
+  ref: main
+  subdir: skills/matplotlib
+install:
+  entry: SKILL.md
+  files: []

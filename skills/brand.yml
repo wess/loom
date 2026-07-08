@@ -1,0 +1,18 @@
+name: brand
+version: 0.1.0
+description: Brand voice, visual identity, messaging frameworks, asset management, brand consistency. Activate for branded content, tone of voice, marketing assets, brand compliance, style guides.
+homepage: https://github.com/nextlevelbuilder/ui-ux-pro-max-skill
+license: MIT
+authors:
+- nextlevelbuilder
+keywords: []
+compatibility:
+- claude-code
+source:
+  type: git
+  url: https://github.com/nextlevelbuilder/ui-ux-pro-max-skill
+  ref: main
+  subdir: .claude/skills/brand
+install:
+  entry: SKILL.md
+  files: []

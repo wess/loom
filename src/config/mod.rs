@@ -60,7 +60,7 @@ impl Default for Config {
             agents,
             default_agent: "claude-code".to_string(),
             repo_path: None,
-            repo_url: Some("https://github.com/loomskills/loom".to_string()),
+            repo_url: Some("https://github.com/wess/loom".to_string()),
         }
     }
 }

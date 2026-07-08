@@ -1,0 +1,18 @@
+name: packer
+version: 0.1.0
+description: HashiCorp Packer for building automated machine images. Use when the user needs to create AMIs, Docker images, or GCP images using HCL templates with provisioners for consistent, reproducible infrastructure images.
+homepage: https://github.com/TerminalSkills/skills
+license: Apache-2.0
+authors:
+- TerminalSkills
+keywords: []
+compatibility:
+- claude-code
+source:
+  type: git
+  url: https://github.com/TerminalSkills/skills
+  ref: main
+  subdir: skills/packer
+install:
+  entry: SKILL.md
+  files: []

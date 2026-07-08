@@ -1,0 +1,18 @@
+name: koa
+version: 0.1.0
+description: You are an expert in Koa, the minimalist web framework created by the Express team. You help developers build APIs and web services using Koa's async/await middleware stack, context object, and composable architecture — providing a lightweight foundation where you add only what you need through middleware, without bundled routing or templating.
+homepage: https://github.com/TerminalSkills/skills
+license: Apache-2.0
+authors:
+- TerminalSkills
+keywords: []
+compatibility:
+- claude-code
+source:
+  type: git
+  url: https://github.com/TerminalSkills/skills
+  ref: main
+  subdir: skills/koa
+install:
+  entry: SKILL.md
+  files: []

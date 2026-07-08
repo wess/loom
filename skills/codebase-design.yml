@@ -1,0 +1,18 @@
+name: codebase-design
+version: 0.1.0
+description: Shared vocabulary for designing deep modules. Use when the user wants to design or improve a module's interface, find deepening opportunities, decide where a seam goes, make code more testable or AI-navigable, or when another skill needs the deep-module vocabulary.
+homepage: https://github.com/mattpocock/skills
+license: MIT
+authors:
+- mattpocock
+keywords: []
+compatibility:
+- claude-code
+source:
+  type: git
+  url: https://github.com/mattpocock/skills
+  ref: main
+  subdir: skills/engineering/codebase-design
+install:
+  entry: SKILL.md
+  files: []

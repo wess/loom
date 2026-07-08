@@ -1,0 +1,18 @@
+name: websocket-engineer
+version: 0.1.0
+description: Use when building real-time communication systems with WebSockets or Socket.IO. Invoke for bidirectional messaging, horizontal scaling with Redis, presence tracking, room management.
+homepage: https://github.com/Jeffallan/claude-skills
+license: MIT
+authors:
+- Jeffallan
+keywords: []
+compatibility:
+- claude-code
+source:
+  type: git
+  url: https://github.com/Jeffallan/claude-skills
+  ref: main
+  subdir: skills/websocket-engineer
+install:
+  entry: SKILL.md
+  files: []

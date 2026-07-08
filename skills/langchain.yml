@@ -1,0 +1,18 @@
+name: langchain
+version: 0.1.0
+description: Build LLM-powered applications with LangChain. Use when a user asks to create AI chains, build RAG pipelines, implement agents with tools, set up document loaders, create vector stores, build conversational AI, implement prompt templates, chain LLM calls, add memory to chatbots, or orchestrate language model workflows. Covers LangChain v0.3+ with LCEL (LangChain Expression Language), structured output, tool calling, retrieval, and production deployment patterns.
+homepage: https://github.com/TerminalSkills/skills
+license: Apache-2.0
+authors:
+- TerminalSkills
+keywords: []
+compatibility:
+- claude-code
+source:
+  type: git
+  url: https://github.com/TerminalSkills/skills
+  ref: main
+  subdir: skills/langchain
+install:
+  entry: SKILL.md
+  files: []

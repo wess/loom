@@ -1,0 +1,18 @@
+name: doubt-driven-development
+version: 0.1.0
+description: Subjects every non-trivial decision to a fresh-context adversarial review before it stands. Use when correctness matters more than speed, when working in unfamiliar code, when stakes are high (production, security-sensitive logic, irreversible operations), or any time a confident output would be cheaper to verify now than to debug later.
+homepage: https://github.com/addyosmani/agent-skills
+license: MIT
+authors:
+- addyosmani
+keywords: []
+compatibility:
+- claude-code
+source:
+  type: git
+  url: https://github.com/addyosmani/agent-skills
+  ref: main
+  subdir: skills/doubt-driven-development
+install:
+  entry: SKILL.md
+  files: []

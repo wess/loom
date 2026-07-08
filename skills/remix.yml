@@ -1,0 +1,18 @@
+name: remix
+version: 0.1.0
+description: 'Assists with building full-stack web applications using Remix. Use when creating apps with nested routing, loader/action patterns, progressive enhancement, or deploying to Node.js, Cloudflare Workers, or other adapters. Trigger words: remix, remix run, loader, action, useFetcher, nested routes, progressive enhancement.'
+homepage: https://github.com/TerminalSkills/skills
+license: Apache-2.0
+authors:
+- TerminalSkills
+keywords: []
+compatibility:
+- claude-code
+source:
+  type: git
+  url: https://github.com/TerminalSkills/skills
+  ref: main
+  subdir: skills/remix
+install:
+  entry: SKILL.md
+  files: []

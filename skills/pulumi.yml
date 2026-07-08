@@ -1,0 +1,18 @@
+name: pulumi
+version: 0.1.0
+description: 'Assists with defining and managing cloud infrastructure using Pulumi with TypeScript, Python, Go, or C#. Use when provisioning AWS, GCP, Azure, or Kubernetes resources with real programming languages instead of HCL. Trigger words: pulumi, infrastructure as code, iac, pulumi up, pulumi stack, cloud infrastructure, component resource.'
+homepage: https://github.com/TerminalSkills/skills
+license: Apache-2.0
+authors:
+- TerminalSkills
+keywords: []
+compatibility:
+- claude-code
+source:
+  type: git
+  url: https://github.com/TerminalSkills/skills
+  ref: main
+  subdir: skills/pulumi
+install:
+  entry: SKILL.md
+  files: []

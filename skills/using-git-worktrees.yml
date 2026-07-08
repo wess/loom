@@ -1,0 +1,18 @@
+name: using-git-worktrees
+version: 0.1.0
+description: Use when starting feature work that needs isolation from current workspace or before executing implementation plans - ensures an isolated workspace exists via native tools or git worktree fallback
+homepage: https://github.com/obra/superpowers
+license: MIT
+authors:
+- obra
+keywords: []
+compatibility:
+- claude-code
+source:
+  type: git
+  url: https://github.com/obra/superpowers
+  ref: main
+  subdir: skills/using-git-worktrees
+install:
+  entry: SKILL.md
+  files: []

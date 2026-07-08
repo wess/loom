@@ -1,0 +1,18 @@
+name: security-and-hardening
+version: 0.1.0
+description: Hardens code against vulnerabilities. Use when handling user input, authentication, data storage, or external integrations. Use when building any feature that accepts untrusted data, manages user sessions, or interacts with third-party services.
+homepage: https://github.com/addyosmani/agent-skills
+license: MIT
+authors:
+- addyosmani
+keywords: []
+compatibility:
+- claude-code
+source:
+  type: git
+  url: https://github.com/addyosmani/agent-skills
+  ref: main
+  subdir: skills/security-and-hardening
+install:
+  entry: SKILL.md
+  files: []

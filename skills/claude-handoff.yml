@@ -1,0 +1,18 @@
+name: claude-handoff
+version: 0.1.0
+description: Hand the current conversation off to a fresh background agent that picks up the work immediately.
+homepage: https://github.com/mattpocock/skills
+license: MIT
+authors:
+- mattpocock
+keywords: []
+compatibility:
+- claude-code
+source:
+  type: git
+  url: https://github.com/mattpocock/skills
+  ref: main
+  subdir: skills/in-progress/claude-handoff
+install:
+  entry: SKILL.md
+  files: []

@@ -1,0 +1,18 @@
+name: design-system
+version: 0.1.0
+description: Token architecture, component specifications, and slide generation. Three-layer tokens (primitive→semantic→component), CSS variables, spacing/typography scales, component specs, strategic slide creation. Use for design tokens, systematic design, brand-compliant presentations.
+homepage: https://github.com/nextlevelbuilder/ui-ux-pro-max-skill
+license: MIT
+authors:
+- nextlevelbuilder
+keywords: []
+compatibility:
+- claude-code
+source:
+  type: git
+  url: https://github.com/nextlevelbuilder/ui-ux-pro-max-skill
+  ref: main
+  subdir: .claude/skills/design-system
+install:
+  entry: SKILL.md
+  files: []

@@ -1,0 +1,18 @@
+name: marketing-psychology
+version: 0.1.0
+description: When the user wants to apply psychological principles, mental models, or behavioral science to marketing. Also use when the user mentions 'psychology,' 'mental models,' 'cognitive bias,' 'persuasion,' 'behavioral science,' 'why people buy,' 'decision-making,' 'consumer behavior,' 'anchoring,' 'social proof,' 'scarcity,' 'loss aversion,' 'framing,' or 'nudge.' Use this whenever someone wants to understand or leverage how people think and make decisions in a marketing context. For applying psychology to specific pages, see cro; for pricing tactics, see pricing; for copy framing, see copywriting.
+homepage: https://github.com/coreyhaines31/marketingskills
+license: MIT
+authors:
+- coreyhaines31
+keywords: []
+compatibility:
+- claude-code
+source:
+  type: git
+  url: https://github.com/coreyhaines31/marketingskills
+  ref: main
+  subdir: skills/marketing-psychology
+install:
+  entry: SKILL.md
+  files: []

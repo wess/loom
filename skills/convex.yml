@@ -1,0 +1,18 @@
+name: convex
+version: 0.1.0
+description: 'Assists with building real-time reactive backends using Convex. Use when creating databases with automatic client sync, reactive queries, file storage, scheduled functions, or full-text and vector search. Trigger words: convex, reactive backend, real-time database, useQuery, useMutation, convex functions, convex schema.'
+homepage: https://github.com/TerminalSkills/skills
+license: Apache-2.0
+authors:
+- TerminalSkills
+keywords: []
+compatibility:
+- claude-code
+source:
+  type: git
+  url: https://github.com/TerminalSkills/skills
+  ref: main
+  subdir: skills/convex
+install:
+  entry: SKILL.md
+  files: []

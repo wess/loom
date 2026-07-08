@@ -1,0 +1,21 @@
+name: sqlite
+version: 0.1.0
+description: |-
+  SQLite is a self-contained, serverless, zero-configuration embedded SQL database engine.
+  Learn CLI usage, Node.js integration with better-sqlite3, Python's built-in sqlite3 module,
+  and best practices for schema design, indexing, and WAL mode.
+homepage: https://github.com/TerminalSkills/skills
+license: Apache-2.0
+authors:
+- TerminalSkills
+keywords: []
+compatibility:
+- claude-code
+source:
+  type: git
+  url: https://github.com/TerminalSkills/skills
+  ref: main
+  subdir: skills/sqlite
+install:
+  entry: SKILL.md
+  files: []

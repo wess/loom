@@ -1,0 +1,18 @@
+name: ci-cd-and-automation
+version: 0.1.0
+description: Automates CI/CD pipeline setup. Use when setting up or modifying build and deployment pipelines. Use when you need to automate quality gates, configure test runners in CI, or establish deployment strategies.
+homepage: https://github.com/addyosmani/agent-skills
+license: MIT
+authors:
+- addyosmani
+keywords: []
+compatibility:
+- claude-code
+source:
+  type: git
+  url: https://github.com/addyosmani/agent-skills
+  ref: main
+  subdir: skills/ci-cd-and-automation
+install:
+  entry: SKILL.md
+  files: []

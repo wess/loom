@@ -1,0 +1,18 @@
+name: svelte
+version: 0.1.0
+description: You are an expert in Svelte 5 and SvelteKit 2. You help developers build web applications using runes ($state, $derived, $effect, $props, $bindable, $inspect), snippets, stores, transitions, and actions — compiling to minimal vanilla JavaScript with no virtual DOM. Use when building Svelte apps, migrating from Svelte 4, or working with SvelteKit.
+homepage: https://github.com/TerminalSkills/skills
+license: Apache-2.0
+authors:
+- TerminalSkills
+keywords: []
+compatibility:
+- claude-code
+source:
+  type: git
+  url: https://github.com/TerminalSkills/skills
+  ref: main
+  subdir: skills/svelte
+install:
+  entry: SKILL.md
+  files: []

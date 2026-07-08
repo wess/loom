@@ -1,0 +1,18 @@
+name: rabbitmq
+version: 0.1.0
+description: Build messaging systems with RabbitMQ — queues, exchanges, routing, dead-letter queues, delayed messages, priority queues, and RPC patterns. Use when tasks involve task queues, background job processing, inter-service communication, request-reply patterns, or reliable message delivery with acknowledgments.
+homepage: https://github.com/TerminalSkills/skills
+license: Apache-2.0
+authors:
+- TerminalSkills
+keywords: []
+compatibility:
+- claude-code
+source:
+  type: git
+  url: https://github.com/TerminalSkills/skills
+  ref: main
+  subdir: skills/rabbitmq
+install:
+  entry: SKILL.md
+  files: []

@@ -1,0 +1,18 @@
+name: referrals
+version: 0.1.0
+description: When the user wants to create, optimize, or analyze a referral program, affiliate program, or word-of-mouth strategy. Also use when the user mentions 'referral,' 'affiliate,' 'ambassador,' 'word of mouth,' 'viral loop,' 'refer a friend,' 'partner program,' 'referral incentive,' 'how to get referrals,' 'customers referring customers,' or 'affiliate payout.' Use this whenever someone wants existing users or partners to bring in new customers. For launch-specific virality, see launch.
+homepage: https://github.com/coreyhaines31/marketingskills
+license: MIT
+authors:
+- coreyhaines31
+keywords: []
+compatibility:
+- claude-code
+source:
+  type: git
+  url: https://github.com/coreyhaines31/marketingskills
+  ref: main
+  subdir: skills/referrals
+install:
+  entry: SKILL.md
+  files: []

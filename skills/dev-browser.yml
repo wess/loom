@@ -1,0 +1,18 @@
+name: dev-browser
+version: 0.1.0
+description: Browser automation with persistent page state. Use when users ask to navigate websites, fill forms, take screenshots, extract web data, test web apps, or automate browser workflows. Trigger phrases include "go to [url]", "click on", "fill out the form", "take a screenshot", "scrape", "automate", "test the website", "log into", or any browser interaction request.
+homepage: https://github.com/SawyerHood/dev-browser
+license: MIT
+authors:
+- SawyerHood
+keywords: []
+compatibility:
+- claude-code
+source:
+  type: git
+  url: https://github.com/SawyerHood/dev-browser
+  ref: main
+  subdir: skills/dev-browser
+install:
+  entry: SKILL.md
+  files: []

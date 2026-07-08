@@ -1,0 +1,18 @@
+name: docker-helper
+version: 0.1.0
+description: Build, debug, and optimize Docker configurations. Use when a user asks to create a Dockerfile, fix Docker build errors, optimize image size, write docker-compose files, debug container issues, set up multi-stage builds, or troubleshoot networking between containers. Covers Dockerfile best practices and compose orchestration.
+homepage: https://github.com/TerminalSkills/skills
+license: Apache-2.0
+authors:
+- TerminalSkills
+keywords: []
+compatibility:
+- claude-code
+source:
+  type: git
+  url: https://github.com/TerminalSkills/skills
+  ref: main
+  subdir: skills/docker-helper
+install:
+  entry: SKILL.md
+  files: []

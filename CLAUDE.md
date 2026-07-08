@@ -31,7 +31,7 @@ LOOM_HOME=/tmp/loomtest cargo run -- index --out docs/skills.json   # rebuild we
 The binary is organized by domain, one small module per concern (each is a folder with `mod.rs`). Data flows: **CLI → command handler → domain modules**.
 
 - `cli/` — clap definitions and `run()`, which parses args and dispatches to a `commands::*` handler. Adding a subcommand means editing the `Command` enum here *and* adding a handler file.
-- `commands/` — one file per subcommand. Handlers are thin: they load `Config`, resolve a manifest, and call into domain modules. `commands/mod.rs` has two shared helpers: `open_repo()` and `resolve_manifest()` (the latter accepts either a repo skill name or a local `.yml` path).
+- `commands/` — one file per subcommand. Handlers are thin: they load `Config`, resolve a manifest, and call into domain modules. `commands/mod.rs` has two shared helpers: `open_repo()` and `resolve_manifest()` (the latter accepts either a repo skill name or a local `.yml` path). Two commands are heavier: `init` is an interactive `dialoguer` wizard that bails unless stdin `IsTerminal` (so it can't be tested non-interactively), and `publish` orchestrates `gh`/`git` to fork+branch+PR — it **defaults to a dry run** and only mutates with `--execute`.
 - `manifest/` — the `Manifest` type and the `<name>.yml` contract. **This is the central data structure everything depends on.** Note the `source.ref_` field is serde-renamed to `ref` (YAML keyword). `lint()` returns `Vec<Problem>` with a `Severity` (Error vs Warning); `validate()` only fails on `Error`, so advisory nits (missing authors, long description, unpinned git ref) never block an install.
 - `repo/` — reads and searches the `skills/` folder (the manifest repository / "tap").
 - `fetch/` — materializes a `Source` into a scratch dir: git via shallow `git clone` (falls back to full clone + checkout for commit SHAs), archive via HTTPS download + sha256 verify + tar/gz unpack (a single wrapping top-level dir is auto-flattened). Returns a `Payload` rooted at the resolved `subdir`.
@@ -46,7 +46,7 @@ Everything Loom owns lives under one prefix, `~/.loom` (override with `LOOM_HOME
 
 ### The website
 
-`docs/` is a dependency-free static GitHub Pages site (no build step). Its search runs client-side over `docs/skills.json`, which is generated from `skills/` by `loom index`. **After changing any manifest, regenerate the index** — CI fails if `docs/skills.json` is stale.
+`docs/` is a dependency-free static GitHub Pages site (no build step). Its search runs client-side over `docs/skills.json`, which is generated from `skills/` by `loom index`. **Contributors don't regenerate the index by hand:** the `reindex` GitHub Actions workflow rebuilds `docs/skills.json` and commits it back whenever a manifest lands on `main` (`.github/workflows/reindex.yml`). PR CI only checks that the index *builds* cleanly, not that it's committed. Regenerate locally (`loom index --out docs/skills.json`) only if you want to preview the site before merge. The site is served as a **project page under `https://wess.io/loom/`**, so every internal link/asset reference in `docs/` must be relative (no leading `/`) or it 404s. `docs/demo.svg` is a hand-authored, self-contained animated terminal (no external tooling); `docs/demo.tape` re-records it as a GIF via `vhs` if ever needed.
 
 ## Conventions
 

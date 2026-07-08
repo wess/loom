@@ -1,0 +1,18 @@
+name: banner-design
+version: 0.1.0
+description: 'Design banners for social media, ads, website heroes, creative assets, and print. Multiple art direction options with AI-generated visuals. Actions: design, create, generate banner. Platforms: Facebook, Twitter/X, LinkedIn, YouTube, Instagram, Google Display, website hero, print. Styles: minimalist, gradient, bold typography, photo-based, illustrated, geometric, retro, glassmorphism, 3D, neon, duotone, editorial, collage. Uses ui-ux-pro-max, frontend-design, ai-artist, ai-multimodal skills.'
+homepage: https://github.com/nextlevelbuilder/ui-ux-pro-max-skill
+license: MIT
+authors:
+- nextlevelbuilder
+keywords: []
+compatibility:
+- claude-code
+source:
+  type: git
+  url: https://github.com/nextlevelbuilder/ui-ux-pro-max-skill
+  ref: main
+  subdir: .claude/skills/banner-design
+install:
+  entry: SKILL.md
+  files: []

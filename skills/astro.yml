@@ -1,0 +1,18 @@
+name: astro
+version: 0.1.0
+description: 'Assists with building content-driven websites using Astro''s island architecture. Use when creating static sites, blogs, documentation, or marketing pages that ship zero JavaScript by default. Trigger words: astro, static site, island architecture, content collections, SSG, hybrid rendering, astro components.'
+homepage: https://github.com/TerminalSkills/skills
+license: Apache-2.0
+authors:
+- TerminalSkills
+keywords: []
+compatibility:
+- claude-code
+source:
+  type: git
+  url: https://github.com/TerminalSkills/skills
+  ref: main
+  subdir: skills/astro
+install:
+  entry: SKILL.md
+  files: []

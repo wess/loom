@@ -1,0 +1,21 @@
+name: mysql
+version: 0.1.0
+description: |-
+  MySQL is the world's most popular open-source relational database management system.
+  Learn installation, SQL queries, indexing strategies, replication setup,
+  and client integration with Node.js (mysql2) and Python (mysql-connector).
+homepage: https://github.com/TerminalSkills/skills
+license: Apache-2.0
+authors:
+- TerminalSkills
+keywords: []
+compatibility:
+- claude-code
+source:
+  type: git
+  url: https://github.com/TerminalSkills/skills
+  ref: main
+  subdir: skills/mysql
+install:
+  entry: SKILL.md
+  files: []

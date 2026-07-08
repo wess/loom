@@ -1,0 +1,21 @@
+name: fastapi
+version: 0.1.0
+description: |-
+  FastAPI is a modern, high-performance Python web framework for building APIs.
+  It leverages Python type hints and Pydantic for automatic validation, serialization,
+  and OpenAPI documentation generation with async/await support out of the box.
+homepage: https://github.com/TerminalSkills/skills
+license: Apache-2.0
+authors:
+- TerminalSkills
+keywords: []
+compatibility:
+- claude-code
+source:
+  type: git
+  url: https://github.com/TerminalSkills/skills
+  ref: main
+  subdir: skills/fastapi
+install:
+  entry: SKILL.md
+  files: []

@@ -126,24 +126,45 @@ fn read_front_matter(path: &Path) -> FrontMatter {
     };
     let yaml = &body[..end];
 
+    // Parse the block as real YAML so folded/literal scalars (`>-`, `|`),
+    // quoted multi-line values, and list forms all resolve correctly.
+    let value: serde_yaml_ng::Value = match serde_yaml_ng::from_str(yaml) {
+        Ok(v) => v,
+        Err(_) => return FrontMatter::default(),
+    };
+
+    let string_at = |key: &str| {
+        value
+            .get(key)
+            .and_then(|v| v.as_str())
+            .map(|s| s.trim().to_string())
+            .filter(|s| !s.is_empty())
+    };
+
     let mut front = FrontMatter::default();
-    for line in yaml.lines() {
-        let Some((key, value)) = line.split_once(':') else {
-            continue;
-        };
-        let value = value.trim().trim_matches('"').trim_matches('\'').to_string();
-        match key.trim() {
-            "name" => front.name = Some(value),
-            "description" => front.description = Some(value),
-            "keywords" | "tags" => {
-                front.keywords = value
-                    .trim_matches(['[', ']'])
-                    .split(',')
-                    .map(|s| s.trim().trim_matches(['"', '\'']).to_string())
+    front.name = string_at("name");
+    front.description = string_at("description");
+    for key in ["keywords", "tags"] {
+        match value.get(key) {
+            Some(serde_yaml_ng::Value::Sequence(items)) => {
+                front.keywords = items
+                    .iter()
+                    .filter_map(|v| v.as_str())
+                    .map(|s| s.trim().to_string())
                     .filter(|s| !s.is_empty())
                     .collect();
             }
-            _ => {}
+            Some(serde_yaml_ng::Value::String(s)) => {
+                front.keywords = s
+                    .split(',')
+                    .map(|s| s.trim().to_string())
+                    .filter(|s| !s.is_empty())
+                    .collect();
+            }
+            _ => continue,
+        }
+        if !front.keywords.is_empty() {
+            break;
         }
     }
     front
@@ -261,5 +282,38 @@ mod tests {
             normalize_homepage("git@github.com:acme/skills.git"),
             "https://github.com/acme/skills"
         );
+    }
+
+    fn front_matter(md: &str) -> FrontMatter {
+        let dir = std::env::temp_dir().join(format!("loom-fm-{}", md.len()));
+        std::fs::create_dir_all(&dir).unwrap();
+        let path = dir.join("SKILL.md");
+        std::fs::write(&path, md).unwrap();
+        let front = read_front_matter(&path);
+        std::fs::remove_dir_all(&dir).ok();
+        front
+    }
+
+    #[test]
+    fn folded_scalar_description_is_read() {
+        let front = front_matter(
+            "---\nname: nextjs\ndescription: >-\n  Build Next.js apps with\n  server components.\nkeywords:\n  - nextjs\n  - react\n---\n\nbody\n",
+        );
+        assert_eq!(front.name.as_deref(), Some("nextjs"));
+        assert_eq!(
+            front.description.as_deref(),
+            Some("Build Next.js apps with server components.")
+        );
+        assert_eq!(front.keywords, vec!["nextjs", "react"]);
+    }
+
+    #[test]
+    fn plain_and_quoted_front_matter_still_parses() {
+        let front = front_matter(
+            "---\nname: pdf\ndescription: \"Read and fill PDFs.\"\ntags: [docs, pdf]\n---\n",
+        );
+        assert_eq!(front.name.as_deref(), Some("pdf"));
+        assert_eq!(front.description.as_deref(), Some("Read and fill PDFs."));
+        assert_eq!(front.keywords, vec!["docs", "pdf"]);
     }
 }

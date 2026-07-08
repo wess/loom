@@ -1,0 +1,18 @@
+name: celery
+version: 0.1.0
+description: Run background tasks in Python with Celery. Use when a user asks to process tasks asynchronously, schedule periodic jobs, run background workers, build task queues in Python, or offload heavy processing from web requests.
+homepage: https://github.com/TerminalSkills/skills
+license: Apache-2.0
+authors:
+- TerminalSkills
+keywords: []
+compatibility:
+- claude-code
+source:
+  type: git
+  url: https://github.com/TerminalSkills/skills
+  ref: main
+  subdir: skills/celery
+install:
+  entry: SKILL.md
+  files: []

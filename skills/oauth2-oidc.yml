@@ -1,0 +1,18 @@
+name: oauth2-oidc
+version: 0.1.0
+description: 'Assists with implementing OAuth 2.0 and OpenID Connect for secure authentication and authorization. Use when configuring authorization flows, validating tokens, implementing PKCE for public clients, setting up social login, or building secure token handling for SPAs, mobile apps, and APIs. Trigger words: oauth, oidc, openid connect, authorization code, pkce, jwt, access token, refresh token.'
+homepage: https://github.com/TerminalSkills/skills
+license: Apache-2.0
+authors:
+- TerminalSkills
+keywords: []
+compatibility:
+- claude-code
+source:
+  type: git
+  url: https://github.com/TerminalSkills/skills
+  ref: main
+  subdir: skills/oauth2-oidc
+install:
+  entry: SKILL.md
+  files: []

@@ -22,6 +22,7 @@
     query: "",
     agent: null, // active compatibility filter, or null for "all"
     lastFocused: null, // element to restore focus to on modal close
+    open: null, // name of the skill whose detail modal is open, or null
   };
 
   /* ----- Helpers --------------------------------------------------------- */
@@ -41,6 +42,61 @@
 
   function copyIcon() {
     return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>';
+  }
+
+  function linkIcon() {
+    return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1.5 1.5"/><path d="M14 11a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1.5-1.5"/></svg>';
+  }
+
+  function fileIcon() {
+    return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/></svg>';
+  }
+
+  /* Absolute, shareable URL for a skill, correct in any environment. */
+  function shareUrl(name) {
+    return (
+      location.origin +
+      location.pathname +
+      "?skill=" +
+      encodeURIComponent(name)
+    );
+  }
+
+  /* ----- Manifest reconstruction ----------------------------------------- */
+  // A scalar needs single-quoting when it could be misread as YAML: it
+  // contains a colon+space, or opens with an indicator/whitespace char.
+  function needsQuote(v) {
+    return /: /.test(v) || /[:#]$/.test(v) || /^[\s&*!|>%@`"'#\-?:,\[\]{}]/.test(v);
+  }
+  function yamlStr(v) {
+    v = String(v == null ? "" : v);
+    return needsQuote(v) ? "'" + v.replace(/'/g, "''") + "'" : v;
+  }
+  function buildManifest(s) {
+    var lines = [];
+    lines.push("name: " + s.name);
+    lines.push("version: " + s.version);
+    lines.push("description: " + yamlStr(s.description || ""));
+    if (s.homepage) lines.push("homepage: " + s.homepage);
+    if (s.license) lines.push("license: " + s.license);
+    if (s.authors && s.authors.length) {
+      lines.push("authors:");
+      s.authors.forEach(function (a) {
+        lines.push("  - " + a);
+      });
+    }
+    if (s.keywords && s.keywords.length) {
+      lines.push("keywords: [" + s.keywords.join(", ") + "]");
+    }
+    if (s.compatibility && s.compatibility.length) {
+      lines.push("compatibility: [" + s.compatibility.join(", ") + "]");
+    }
+    lines.push("source:");
+    lines.push("  type: git");
+    lines.push("  url: " + s.source);
+    lines.push("install:");
+    lines.push("  entry: SKILL.md");
+    return lines.join("\n");
   }
 
   /* ----- Filtering ------------------------------------------------------- */
@@ -189,6 +245,9 @@
       })
       .join("");
 
+    var manifest = buildManifest(s);
+    var url = shareUrl(s.name);
+
     return (
       '<h2 class="modal__title" id="modalTitle">' + esc(s.name) + "</h2>" +
       '<p class="modal__meta">v' + esc(s.version) + "</p>" +
@@ -200,34 +259,66 @@
       '<span class="cmd__text">' + esc(install) + "</span>" +
       '<button class="copy-btn" type="button" data-copy="' + esc(install) +
       '" aria-label="Copy install command">' + copyIcon() +
-      '<span class="copy-btn__label">Copy</span></button></div>'
+      '<span class="copy-btn__label">Copy</span></button></div>' +
+      '<div class="modal__actions">' +
+      '<button class="btn btn--ghost btn--sm" type="button" data-copy="' +
+      esc(url) + '" aria-label="Copy shareable link">' + linkIcon() +
+      '<span class="copy-btn__label">Copy link</span></button>' +
+      '<button class="btn btn--ghost btn--sm" type="button" data-copy="' +
+      esc(manifest) + '" aria-label="Copy ' + esc(s.name) +
+      '.yml manifest">' + fileIcon() +
+      '<span class="copy-btn__label">Copy manifest</span></button>' +
+      "</div>"
     );
   }
 
-  function openModal(name) {
+  // push: add a history entry (default). Pass false when the navigation was
+  // itself driven by history (deep-link load or a popstate event).
+  function openModal(name, push) {
     var s = state.all.filter(function (x) {
       return x.name === name;
     })[0];
     if (!s) return;
 
-    state.lastFocused = document.activeElement;
+    var wasOpen = els.modal.classList.contains("is-open");
+    if (!wasOpen) state.lastFocused = document.activeElement;
     els.modalBody.innerHTML = modalHTML(s);
     window.Loom.wireCopyButtons(els.modalBody);
     els.modal.hidden = false;
     els.modal.classList.add("is-open");
-    if (history.replaceState) history.replaceState(null, "", "#" + name);
+    state.open = name;
+
+    if (push !== false && history.pushState) {
+      history.pushState(
+        { skill: name },
+        "",
+        location.pathname + "?skill=" + encodeURIComponent(name)
+      );
+    }
     els.modalClose.focus();
     document.addEventListener("keydown", onKeydown);
   }
 
-  function closeModal() {
+  function closeModal(push) {
+    if (!els.modal.classList.contains("is-open")) return;
     els.modal.classList.remove("is-open");
     els.modal.hidden = true;
+    state.open = null;
     document.removeEventListener("keydown", onKeydown);
-    if (history.replaceState)
-      history.replaceState(null, "", location.pathname + location.search);
+    if (push !== false && history.pushState)
+      history.pushState({}, "", location.pathname);
     if (state.lastFocused && state.lastFocused.focus) state.lastFocused.focus();
   }
+
+  // Back/forward: reconcile the modal with the URL's ?skill= param.
+  window.addEventListener("popstate", function () {
+    var name = new URLSearchParams(location.search).get("skill");
+    if (name) {
+      openModal(name, false);
+    } else {
+      closeModal(false);
+    }
+  });
 
   function onKeydown(e) {
     if (e.key === "Escape") {
@@ -277,11 +368,17 @@
       buildChips();
       render();
 
-      // Deep link: #skill-name opens that skill's detail on load.
-      var hash = decodeURIComponent(location.hash.replace(/^#/, ""));
-      if (hash) openModal(hash);
-
-      els.q.focus();
+      // Deep link: ?skill=<name> opens that skill's detail on load.
+      // Fall back to a legacy #<name> hash if present.
+      var name = new URLSearchParams(location.search).get("skill");
+      if (!name && location.hash) {
+        name = decodeURIComponent(location.hash.replace(/^#/, ""));
+      }
+      if (name) {
+        openModal(name, false);
+      } else {
+        els.q.focus();
+      }
     })
     .catch(function () {
       els.count.textContent = "";

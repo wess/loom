@@ -1,0 +1,18 @@
+name: kubernetes-helm
+version: 0.1.0
+description: 'Manages Kubernetes clusters and Helm charts. Use when the user wants to write Kubernetes manifests, create Helm charts, deploy applications, debug pods, configure networking (services, ingress), set up autoscaling, manage secrets and config maps, write operators, troubleshoot cluster issues, or implement GitOps workflows. Trigger words: kubernetes, k8s, kubectl, helm, helm chart, pod, deployment, service, ingress, namespace, configmap, secret, hpa, pvc, statefulset, daemonset, cronjob, operator, kustomize, argocd, flux, gitops, node pool, taint, toleration, affinity.'
+homepage: https://github.com/TerminalSkills/skills
+license: Apache-2.0
+authors:
+- TerminalSkills
+keywords: []
+compatibility:
+- claude-code
+source:
+  type: git
+  url: https://github.com/TerminalSkills/skills
+  ref: main
+  subdir: skills/kubernetes-helm
+install:
+  entry: SKILL.md
+  files: []
