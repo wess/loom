@@ -179,7 +179,7 @@
                 total + (total === 1 ? " skill" : " skills") +
                 " in the repository and counting.";
             }
-            var skills = (data.skills || []).slice(0, 6);
+            var skills = pickFeatured(data.skills || [], 6);
             if (!skills.length) {
               mount.innerHTML =
                 '<div class="state"><h3>No skills yet</h3><p>The index is empty.</p></div>';
@@ -200,6 +200,37 @@
               '<div class="state"><h3>Couldn\'t load skills</h3><p>The index is served over http on GitHub Pages. Try the <a class="link" href="browse.html">Browse</a> page.</p></div>';
           });
 
+        // The owning org/user of a skill's source repo, for source diversity.
+        function ownerOf(s) {
+          var u = String(s.source || s.homepage || "")
+            .replace(/\.git$/, "")
+            .replace(/\/+$/, "");
+          var m = u.match(/[:/]([^/]+)\/[^/]+$/);
+          return m ? m[1] : u;
+        }
+        // A fresh, non-alphabetic set on every load: shuffle, then take one per
+        // distinct source before repeating, so the six never all share a repo.
+        function pickFeatured(all, n) {
+          var pool = all.slice();
+          for (var i = pool.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var t = pool[i];
+            pool[i] = pool[j];
+            pool[j] = t;
+          }
+          var picked = [];
+          var seen = {};
+          for (var k = 0; k < pool.length && picked.length < n; k++) {
+            var o = ownerOf(pool[k]);
+            if (seen[o]) continue;
+            seen[o] = true;
+            picked.push(pool[k]);
+          }
+          for (var f = 0; f < pool.length && picked.length < n; f++) {
+            if (picked.indexOf(pool[f]) === -1) picked.push(pool[f]);
+          }
+          return picked;
+        }
         function esc(s) {
           return String(s == null ? "" : s).replace(/[&<>"]/g, function (c) {
             return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c];
