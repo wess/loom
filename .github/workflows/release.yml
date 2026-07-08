@@ -1,0 +1,196 @@
+name: Release
+
+# Releases are driven by the crate version. Bumping `version` in Cargo.toml and
+# pushing to main cuts a full release: tag, GitHub Release, prebuilt binaries
+# for macOS + Linux, and a refreshed Homebrew formula. See docs/release.md.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "Cargo.toml"
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+jobs:
+  check-version:
+    runs-on: ubuntu-latest
+    outputs:
+      changed: ${{ steps.diff.outputs.changed }}
+      version: ${{ steps.version.outputs.version }}
+    steps:
+      - uses: actions/checkout@v4
+
+      # Release when the crate version has no matching tag yet. Idempotent for
+      # both push and manual dispatch (a HEAD~1 diff would miss dispatches and
+      # re-released versions).
+      - name: Read crate version
+        id: version
+        run: |
+          VERSION=$(sed -n 's/^version = "\([0-9][^"]*\)".*/\1/p' Cargo.toml | head -1)
+          echo "version=${VERSION}" >> "$GITHUB_OUTPUT"
+
+      - name: Decide whether to release
+        id: diff
+        run: |
+          NEW="${{ steps.version.outputs.version }}"
+          if git ls-remote --tags origin "refs/tags/v${NEW}" | grep -q .; then
+            echo "v${NEW} already released — skipping."
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+  create-release:
+    runs-on: ubuntu-latest
+    needs: check-version
+    if: needs.check-version.outputs.changed == 'true'
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Create git tag
+        run: |
+          git tag "v${{ needs.check-version.outputs.version }}"
+          git push origin "v${{ needs.check-version.outputs.version }}"
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: "v${{ needs.check-version.outputs.version }}"
+          generate_release_notes: true
+          draft: false
+
+  build:
+    needs: [check-version, create-release]
+    if: needs.check-version.outputs.changed == 'true'
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - target: aarch64-apple-darwin
+            runner: macos-latest
+          - target: x86_64-apple-darwin
+            runner: macos-latest
+          - target: x86_64-unknown-linux-gnu
+            runner: ubuntu-22.04
+          - target: aarch64-unknown-linux-gnu
+            runner: ubuntu-22.04-arm
+    runs-on: ${{ matrix.runner }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: "v${{ needs.check-version.outputs.version }}"
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ matrix.target }}
+
+      - name: Cache cargo
+        uses: Swatinem/rust-cache@v2
+
+      - name: Build + package
+        run: scripts/package.sh ${{ matrix.target }}
+
+      - name: Upload to release
+        run: gh release upload "v${{ needs.check-version.outputs.version }}" dist/*.tar.gz dist/*.sha256 --clobber
+        env:
+          GH_TOKEN: ${{ github.token }}
+
+  update-homebrew:
+    runs-on: ubuntu-latest
+    needs: [check-version, build]
+    if: needs.check-version.outputs.changed == 'true'
+    steps:
+      - name: Fetch release checksums
+        id: shas
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          VERSION="${{ needs.check-version.outputs.version }}"
+          mkdir -p shas
+          for i in $(seq 1 30); do
+            if gh release download "v${VERSION}" --repo wess/loom --pattern '*.sha256' --dir shas --clobber 2>/dev/null; then
+              break
+            fi
+            echo "Waiting for checksums... ($i/30)"; sleep 10
+          done
+          read_sha() { cut -d' ' -f1 "shas/loom-${VERSION}-$1.tar.gz.sha256"; }
+          {
+            echo "mac_arm=$(read_sha aarch64-apple-darwin)"
+            echo "mac_x86=$(read_sha x86_64-apple-darwin)"
+            echo "linux_arm=$(read_sha aarch64-unknown-linux-gnu)"
+            echo "linux_x86=$(read_sha x86_64-unknown-linux-gnu)"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Checkout homebrew tap
+        uses: actions/checkout@v4
+        with:
+          repository: wess/homebrew-packages
+          token: ${{ secrets.HOMEBREW_TAP_TOKEN }}
+          path: tap
+
+      - name: Update formula
+        run: |
+          VERSION="${{ needs.check-version.outputs.version }}"
+          mkdir -p tap/Formula
+          cat > tap/Formula/loom.rb << 'RUBY'
+          class Loom < Formula
+            desc "Package manager for AI skills (Claude Code, Codex, and friends)"
+            homepage "https://wess.io/loom"
+            version "VERSION_PLACEHOLDER"
+            license "MIT"
+
+            on_macos do
+              on_arm do
+                url "https://github.com/wess/loom/releases/download/v#{version}/loom-#{version}-aarch64-apple-darwin.tar.gz"
+                sha256 "SHA_MAC_ARM"
+              end
+              on_intel do
+                url "https://github.com/wess/loom/releases/download/v#{version}/loom-#{version}-x86_64-apple-darwin.tar.gz"
+                sha256 "SHA_MAC_X86"
+              end
+            end
+
+            on_linux do
+              on_arm do
+                url "https://github.com/wess/loom/releases/download/v#{version}/loom-#{version}-aarch64-unknown-linux-gnu.tar.gz"
+                sha256 "SHA_LINUX_ARM"
+              end
+              on_intel do
+                url "https://github.com/wess/loom/releases/download/v#{version}/loom-#{version}-x86_64-unknown-linux-gnu.tar.gz"
+                sha256 "SHA_LINUX_X86"
+              end
+            end
+
+            depends_on "git"
+
+            def install
+              bin.install "loom"
+            end
+
+            test do
+              assert_match "loom", shell_output("#{bin}/loom --version")
+            end
+          end
+          RUBY
+          sed -i "s/VERSION_PLACEHOLDER/${VERSION}/g" tap/Formula/loom.rb
+          sed -i "s/SHA_MAC_ARM/${{ steps.shas.outputs.mac_arm }}/g" tap/Formula/loom.rb
+          sed -i "s/SHA_MAC_X86/${{ steps.shas.outputs.mac_x86 }}/g" tap/Formula/loom.rb
+          sed -i "s/SHA_LINUX_ARM/${{ steps.shas.outputs.linux_arm }}/g" tap/Formula/loom.rb
+          sed -i "s/SHA_LINUX_X86/${{ steps.shas.outputs.linux_x86 }}/g" tap/Formula/loom.rb
+
+      - name: Push updated formula
+        run: |
+          cd tap
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add Formula/loom.rb
+          if git diff --cached --quiet; then
+            echo "Formula unchanged — skipping push."
+          else
+            git commit -m "Update loom to v${{ needs.check-version.outputs.version }}"
+            git push
+          fi

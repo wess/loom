@@ -44,16 +44,37 @@ manifest (skills/pdf.yml)  ──▶  loom install pdf  ──▶  ~/.claude/ski
 
 ## Install
 
-Loom is a single Rust binary.
+Loom is a single Rust binary. Pick whichever you like:
+
+### Homebrew (macOS & Linux)
 
 ```sh
-# from source
+brew install wess/packages/loom
+```
+
+### Install script (macOS & Linux)
+
+```sh
+curl -fsSL https://raw.githubusercontent.com/wess/loom/main/scripts/install.sh | sh
+```
+
+Detects your OS and architecture, downloads the matching release, verifies its
+checksum, and drops `loom` on your `PATH`. Set `LOOM_VERSION` to pin a version or
+`LOOM_BIN_DIR` to choose the install directory.
+
+### Prebuilt binaries
+
+Grab a `.tar.gz` for your platform from the
+[releases page](https://github.com/wess/loom/releases) — builds are published for
+macOS and Linux on both `x86_64` and `aarch64` — then extract `loom` onto your
+`PATH`.
+
+### From source
+
+```sh
 git clone https://github.com/wess/loom
 cd loom
 cargo install --path .
-
-# or, once published
-cargo install loom
 ```
 
 You need `git` on your `PATH` (Loom shells out to it for git sources, exactly like
