@@ -1,0 +1,17 @@
+name: web-artifacts-builder
+version: 0.1.0
+description: Suite of tools for creating elaborate, multi-component claude.ai HTML artifacts using modern frontend web technologies (React, Tailwind CSS, shadcn/ui). Use for complex artifacts requiring state management, routing, or shadcn/ui components - not for simple single-file HTML/JSX artifacts.
+homepage: https://github.com/anthropics/skills
+authors:
+- anthropics
+keywords: []
+compatibility:
+- claude-code
+source:
+  type: git
+  url: https://github.com/anthropics/skills
+  ref: main
+  subdir: skills/web-artifacts-builder
+install:
+  entry: SKILL.md
+  files: []

@@ -1,0 +1,17 @@
+name: webapp-testing
+version: 0.1.0
+description: Toolkit for interacting with and testing local web applications using Playwright. Supports verifying frontend functionality, debugging UI behavior, capturing browser screenshots, and viewing browser logs.
+homepage: https://github.com/anthropics/skills
+authors:
+- anthropics
+keywords: []
+compatibility:
+- claude-code
+source:
+  type: git
+  url: https://github.com/anthropics/skills
+  ref: main
+  subdir: skills/webapp-testing
+install:
+  entry: SKILL.md
+  files: []

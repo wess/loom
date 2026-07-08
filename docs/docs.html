@@ -1,0 +1,354 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Docs — Loom</title>
+    <meta name="description" content="Loom documentation: installation, quickstart, CLI reference, manifest format, and authoring skills." />
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cg fill='none' stroke='%23b96a2e' stroke-width='2'%3E%3Cpath d='M4 8h16M4 16h16M8 4v16M16 4v16'/%3E%3C/g%3E%3C/svg%3E" />
+    <script>
+      (function () {
+        try {
+          var t =
+            localStorage.getItem("loom-theme") ||
+            (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+          document.documentElement.setAttribute("data-theme", t);
+        } catch (e) {}
+      })();
+    </script>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+
+    <header class="nav">
+      <div class="nav__inner">
+        <a class="brand" href="index.html" aria-label="Loom home">
+          <svg class="brand__mark" viewBox="0 0 24 24" aria-hidden="true">
+            <g fill="none" stroke="currentColor" stroke-width="1.6" style="color: var(--accent)">
+              <path d="M4 8h16M4 16h16M8 4v16M16 4v16" />
+            </g>
+          </svg>
+          Loom
+        </a>
+        <nav class="nav__links" aria-label="Primary">
+          <a class="nav__link" data-page="browse.html" href="browse.html">Browse</a>
+          <a class="nav__link" data-page="docs.html" href="docs.html">Docs</a>
+          <a class="nav__link nav__link--hide-sm" href="https://github.com/loomskills/loom">GitHub</a>
+          <button class="icon-btn theme-toggle" type="button" aria-label="Toggle color theme">
+            <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+            <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+          </button>
+        </nav>
+      </div>
+    </header>
+
+    <main id="main" class="wrap">
+      <div class="docs">
+        <!-- Table of contents -->
+        <aside>
+          <nav class="toc" id="toc" aria-label="On this page">
+            <p class="toc__title">On this page</p>
+            <a href="#what">What is Loom</a>
+            <a href="#install">Installation</a>
+            <a href="#quickstart">Quickstart</a>
+            <a href="#cli">CLI reference</a>
+            <a href="#manifest">Manifest format</a>
+            <a href="#authoring">Authoring a skill</a>
+            <a href="#index">Website index</a>
+          </nav>
+        </aside>
+
+        <!-- Content -->
+        <article class="doc-content">
+          <section id="what">
+            <h1>Loom documentation</h1>
+            <p class="lead">
+              Loom is a package manager for AI skills. It installs, inspects, and
+              authors reusable skills for AI agents such as Claude Code, OpenAI
+              Codex, and Cursor.
+            </p>
+            <p>
+              A <em>skill</em> is a folder of instructions and helper files an
+              agent loads to do a job well — writing PDFs, building slide decks,
+              designing artifacts, and so on. Loom does for those skills what
+              Homebrew does for command-line tools: a shared repository of
+              <strong>manifests</strong> describes where each skill lives and how
+              to fetch it, and Loom weaves the payload into your agent's skills
+              folder on request.
+            </p>
+            <p>
+              A manifest never contains the skill payload itself. It only
+              describes how to obtain and place a skill, in the spirit of a
+              Homebrew formula. That keeps the repository small and lets skills
+              live in their own upstream projects.
+            </p>
+          </section>
+
+          <section id="install">
+            <h2>Installation</h2>
+            <p>Loom is a single Rust binary. Install it with Cargo:</p>
+            <div class="codeblock">
+              <button class="copy-btn" type="button" data-copy="cargo install loom" aria-label="Copy code"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg></button>
+              <pre class="code"><code>cargo install loom</code></pre>
+            </div>
+            <p>Confirm it is on your <code>PATH</code> and check your environment:</p>
+            <div class="codeblock">
+              <button class="copy-btn" type="button" data-copy="loom --version&#10;loom doctor" aria-label="Copy code"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg></button>
+              <pre class="code"><code>loom --version
+loom doctor</code></pre>
+            </div>
+            <p>
+              <code>loom doctor</code> checks for common problems — a reachable
+              skill repository, writable agent skills folders, and the tools Loom
+              relies on to fetch sources.
+            </p>
+          </section>
+
+          <section id="quickstart">
+            <h2>Quickstart</h2>
+            <p>Find a skill, install it, and confirm it landed.</p>
+            <div class="codeblock">
+              <button class="copy-btn" type="button" data-copy="loom search pdf&#10;loom info pdf&#10;loom install pdf&#10;loom list" aria-label="Copy code"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg></button>
+              <pre class="code"><code># search the repository
+loom search pdf
+
+# read the details before installing
+loom info pdf
+
+# install into the default agent (Claude Code)
+loom install pdf
+
+# see what's installed
+loom list</code></pre>
+            </div>
+            <p>
+              By default Loom installs into Claude Code at
+              <code>~/.claude/skills</code>. Target a different agent with
+              <code>--agent</code>:
+            </p>
+            <div class="codeblock">
+              <button class="copy-btn" type="button" data-copy="loom install pdf --agent codex" aria-label="Copy code"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg></button>
+              <pre class="code"><code>loom install pdf --agent codex</code></pre>
+            </div>
+            <div class="note">
+              <strong>Agents Loom knows about:</strong>
+              <code>claude-code</code> (<code>~/.claude/skills</code>, the default),
+              <code>codex</code> (<code>~/.codex/skills</code>), and
+              <code>cursor</code> (<code>~/.cursor/skills</code>). Run
+              <code>loom agents</code> to list them and see which is the default.
+            </div>
+          </section>
+
+          <section id="cli">
+            <h2>CLI reference</h2>
+            <p>Every command Loom ships with. Run <code>loom &lt;command&gt; --help</code> for full flags.</p>
+            <div class="table-scroll">
+              <table class="ref">
+                <thead>
+                  <tr><th>Command</th><th>What it does</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td><code>loom install &lt;skill&gt;</code></td><td>Install a skill for an agent. Accepts a repo skill name, or a path/URL to a manifest. Use <code>--agent</code> to target a specific agent.</td></tr>
+                  <tr><td><code>loom remove &lt;skill&gt;</code></td><td>Remove an installed skill. Aliases: <code>uninstall</code>, <code>rm</code>.</td></tr>
+                  <tr><td><code>loom list</code></td><td>List installed skills. Alias <code>ls</code>. Filter with <code>--agent</code>.</td></tr>
+                  <tr><td><code>loom search &lt;query&gt;</code></td><td>Search the skill repository by name, description, and keywords.</td></tr>
+                  <tr><td><code>loom info &lt;skill&gt;</code></td><td>Show full details for a skill from its manifest.</td></tr>
+                  <tr><td><code>loom update</code></td><td>Sync the local skill repository from its remote.</td></tr>
+                  <tr><td><code>loom upgrade [skill]</code></td><td>Upgrade installed skills to the repository's version. Omit the name to upgrade all.</td></tr>
+                  <tr><td><code>loom new &lt;name&gt;</code></td><td>Scaffold a new manifest to author from. Use <code>--out</code> to choose where it's written.</td></tr>
+                  <tr><td><code>loom lint [path]</code></td><td>Validate a manifest file, or every manifest in the repository when no path is given.</td></tr>
+                  <tr><td><code>loom test &lt;skill&gt;</code></td><td>Fetch and stage a skill without installing it, to verify its manifest resolves.</td></tr>
+                  <tr><td><code>loom generate &lt;url&gt;</code></td><td>Generate manifests by inspecting a skills repository URL (alias: <code>create</code>; URL may also be passed as <code>--url</code>). Pin with <code>--ref</code>, write with <code>--out</code>.</td></tr>
+                  <tr><td><code>loom index</code></td><td>Build the website search index from the repository. Defaults to <code>docs/skills.json</code>; override with <code>--out</code>.</td></tr>
+                  <tr><td><code>loom agents</code></td><td>List the agents Loom can install into and their skills folders.</td></tr>
+                  <tr><td><code>loom doctor</code></td><td>Check the environment for common problems.</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <section id="manifest">
+            <h2>Manifest format</h2>
+            <p>
+              A manifest is a YAML file named <code>&lt;skill_name&gt;.yml</code>
+              that lives in a Loom repository's <code>skills/</code> folder. It
+              describes how to fetch and lay down one skill.
+            </p>
+            <div class="codeblock">
+              <button class="copy-btn" type="button" data-copy="name: pdf&#10;version: 0.1.0&#10;description: Read, fill, and generate PDF documents.&#10;homepage: https://github.com/anthropics/skills&#10;license: MIT&#10;authors:&#10;  - Anthropics &lt;skills@anthropic.com&gt;&#10;keywords:&#10;  - pdf&#10;  - documents&#10;compatibility:&#10;  - claude-code&#10;  - codex&#10;source:&#10;  type: git&#10;  url: https://github.com/anthropics/skills&#10;  ref: v0.1.0&#10;  subdir: pdf&#10;install:&#10;  entry: SKILL.md&#10;  files: []" aria-label="Copy code"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg></button>
+              <pre class="code"><code>name: pdf
+version: 0.1.0
+description: Read, fill, and generate PDF documents.
+homepage: https://github.com/anthropics/skills
+license: MIT
+authors:
+  - Anthropics &lt;skills@anthropic.com&gt;
+keywords:
+  - pdf
+  - documents
+compatibility:
+  - claude-code
+  - codex
+source:
+  type: git            # git | archive
+  url: https://github.com/anthropics/skills
+  ref: v0.1.0          # git tag, branch, or commit (git sources)
+  # sha256: &lt;hash&gt;     # expected archive checksum (archive sources)
+  subdir: pdf          # folder inside the repo that is the skill
+install:
+  entry: SKILL.md      # the file an agent loads first
+  files: []            # explicit paths to include; empty copies everything</code></pre>
+            </div>
+
+            <h3>Fields</h3>
+            <div class="table-scroll">
+              <table class="ref">
+                <thead><tr><th>Field</th><th>Meaning</th></tr></thead>
+                <tbody>
+                  <tr><td><code>name</code></td><td>Unique skill identifier. Lowercase.</td></tr>
+                  <tr><td><code>version</code></td><td>Semver-ish version string.</td></tr>
+                  <tr><td><code>description</code></td><td>One-line summary shown in search and info.</td></tr>
+                  <tr><td><code>homepage</code></td><td>Project homepage URL.</td></tr>
+                  <tr><td><code>license</code></td><td>SPDX license identifier. Optional.</td></tr>
+                  <tr><td><code>authors[]</code></td><td>Free-form <code>Name &lt;email&gt;</code> strings.</td></tr>
+                  <tr><td><code>keywords[]</code></td><td>Search tags.</td></tr>
+                  <tr><td><code>compatibility[]</code></td><td>Agents the skill is known to work with.</td></tr>
+                  <tr><td><code>source.type</code></td><td><code>git</code> to clone a repo, or <code>archive</code> to download a <code>.tar.gz</code>.</td></tr>
+                  <tr><td><code>source.url</code></td><td>Clone or download URL.</td></tr>
+                  <tr><td><code>source.ref</code></td><td>Git tag, branch, or commit. Git sources only.</td></tr>
+                  <tr><td><code>source.sha256</code></td><td>Expected checksum of the archive. Archive sources only.</td></tr>
+                  <tr><td><code>source.subdir</code></td><td>Sub-directory inside the repo/archive that holds the skill. Empty means the root is the skill.</td></tr>
+                  <tr><td><code>install.entry</code></td><td>The file an agent loads first. Defaults to <code>SKILL.md</code>.</td></tr>
+                  <tr><td><code>install.files[]</code></td><td>Explicit relative paths to include. Empty copies everything.</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <section id="authoring">
+            <h2>Authoring a skill</h2>
+            <p>Contributing a skill is scaffold, edit, validate, test, and open a pull request.</p>
+            <ol>
+              <li><strong>Scaffold</strong> a manifest with <code>loom new</code>.</li>
+              <li><strong>Edit</strong> the generated <code>&lt;name&gt;.yml</code> — point <code>source.url</code> / <code>subdir</code> at where the skill actually lives, and fill in the metadata.</li>
+              <li><strong>Lint</strong> it to catch missing or malformed fields.</li>
+              <li><strong>Test</strong> it — Loom fetches and stages the payload without installing, proving the source resolves.</li>
+              <li><strong>Open a pull request</strong> that adds the manifest to the repository's <code>skills/</code> folder.</li>
+            </ol>
+            <div class="codeblock">
+              <button class="copy-btn" type="button" data-copy="loom new my-skill&#10;# edit skills/my-skill.yml&#10;loom lint skills/my-skill.yml&#10;loom test my-skill" aria-label="Copy code"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg></button>
+              <pre class="code"><code>loom new my-skill
+# edit skills/my-skill.yml — set source.url, subdir, description…
+loom lint skills/my-skill.yml
+loom test my-skill</code></pre>
+            </div>
+            <p>
+              When lint and test pass, commit the manifest under
+              <code>skills/</code> and open a PR against the repository. Once it
+              merges and the index is rebuilt, your skill is installable with
+              <code>loom install my-skill</code>.
+            </p>
+            <div class="note">
+              Have an existing skills repository? <code>loom generate &lt;url&gt;</code>
+              inspects it and drafts manifests for you — a fast way to bring many
+              skills into Loom at once.
+            </div>
+          </section>
+
+          <section id="index">
+            <h2>How the website index is built</h2>
+            <p>
+              This site's search is powered by a generated index at
+              <code>docs/skills.json</code>. It is produced by reading every
+              manifest in the repository's <code>skills/</code> folder and
+              writing out their metadata:
+            </p>
+            <div class="codeblock">
+              <button class="copy-btn" type="button" data-copy="loom index&#10;# or choose an output path&#10;loom index --out docs/skills.json" aria-label="Copy code"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg></button>
+              <pre class="code"><code>loom index
+# defaults to docs/skills.json; override the destination:
+loom index --out docs/skills.json</code></pre>
+            </div>
+            <p>The output is a small JSON document the Browse page fetches at runtime:</p>
+            <div class="codeblock">
+              <button class="copy-btn" type="button" data-copy='{ &quot;generated_by&quot;: &quot;loom 0.1.0&quot;, &quot;count&quot;: 17, &quot;skills&quot;: [ ... ] }' aria-label="Copy code"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg></button>
+              <pre class="code"><code>{
+  "generated_by": "loom 0.1.0",
+  "count": 17,
+  "skills": [
+    {
+      "name": "pdf",
+      "version": "0.1.0",
+      "description": "Read, fill, and generate PDF documents.",
+      "homepage": "https://github.com/anthropics/skills",
+      "license": null,
+      "authors": ["anthropics"],
+      "keywords": [],
+      "compatibility": ["claude-code"],
+      "source": "https://github.com/anthropics/skills"
+    }
+  ]
+}</code></pre>
+            </div>
+            <p>
+              Because GitHub Pages serves the <code>docs/</code> folder as-is,
+              re-running <code>loom index</code> and committing the updated
+              <code>skills.json</code> is all it takes to refresh what appears on
+              the <a class="link" href="browse.html">Browse</a> page.
+            </p>
+          </section>
+        </article>
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="wrap footer__inner">
+        <span>Loom — the package manager for AI skills.</span>
+        <nav class="footer__links" aria-label="Footer">
+          <a href="index.html">Home</a>
+          <a href="browse.html">Browse</a>
+          <a href="https://github.com/loomskills/loom">GitHub</a>
+        </nav>
+      </div>
+    </footer>
+
+    <script src="app.js"></script>
+    <script>
+      // Highlight the current section in the table of contents while scrolling.
+      (function () {
+        var links = Array.prototype.slice.call(
+          document.querySelectorAll(".toc a")
+        );
+        var map = {};
+        links.forEach(function (a) {
+          map[a.getAttribute("href").slice(1)] = a;
+        });
+        var sections = links
+          .map(function (a) {
+            return document.getElementById(a.getAttribute("href").slice(1));
+          })
+          .filter(Boolean);
+
+        if (!("IntersectionObserver" in window) || !sections.length) return;
+
+        var io = new IntersectionObserver(
+          function (entries) {
+            entries.forEach(function (e) {
+              if (e.isIntersecting) {
+                links.forEach(function (l) {
+                  l.classList.remove("is-active");
+                });
+                if (map[e.target.id]) map[e.target.id].classList.add("is-active");
+              }
+            });
+          },
+          { rootMargin: "-40% 0px -55% 0px", threshold: 0 }
+        );
+        sections.forEach(function (s) {
+          io.observe(s);
+        });
+      })();
+    </script>
+  </body>
+</html>

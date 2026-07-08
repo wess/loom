@@ -1,0 +1,17 @@
+name: slack-gif-creator
+version: 0.1.0
+description: Knowledge and utilities for creating animated GIFs optimized for Slack. Provides constraints, validation tools, and animation concepts. Use when users request animated GIFs for Slack like "make me a GIF of X doing Y for Slack.
+homepage: https://github.com/anthropics/skills
+authors:
+- anthropics
+keywords: []
+compatibility:
+- claude-code
+source:
+  type: git
+  url: https://github.com/anthropics/skills
+  ref: main
+  subdir: skills/slack-gif-creator
+install:
+  entry: SKILL.md
+  files: []

@@ -1,0 +1,44 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  build:
+    name: build, test, lint manifests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Cache cargo
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            target
+          key: cargo-${{ hashFiles('Cargo.lock') }}
+
+      - name: Build
+        run: cargo build --release
+
+      - name: Test
+        run: cargo test --release
+
+      - name: Lint every manifest
+        env:
+          LOOM_HOME: ${{ runner.temp }}/loom
+        run: cargo run --release -- lint
+
+      - name: Verify the website index is up to date
+        env:
+          LOOM_HOME: ${{ runner.temp }}/loom
+        run: |
+          cargo run --release -- index --out docs/skills.json
+          if ! git diff --quiet -- docs/skills.json; then
+            echo "::error::docs/skills.json is stale. Run 'loom index --out docs/skills.json' and commit."
+            git --no-pager diff -- docs/skills.json
+            exit 1
+          fi
