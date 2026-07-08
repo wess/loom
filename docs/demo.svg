@@ -2,17 +2,17 @@
   <title>loom — search and install a skill</title>
   <defs>
     <style>
-      .win { fill: #0d1117; }
-      .bar { fill: #161b22; }
+      .win { fill: #2e3440; }
+      .bar { fill: #3b4252; }
       .txt { font-family: ui-monospace, "SF Mono", "Menlo", "Consolas", monospace; font-size: 16px; }
-      .prompt { fill: #7ee787; }
-      .cmd { fill: #e6edf3; }
-      .name { fill: #ffb454; }
-      .ver { fill: #6e7681; }
-      .desc { fill: #8b949e; }
-      .step { fill: #79c0ff; }
-      .ok { fill: #7ee787; }
-      .cur { fill: #e6edf3; }
+      .prompt { fill: #a3be8c; }
+      .cmd { fill: #eceff4; }
+      .name { fill: #d08770; }
+      .ver { fill: #6a7385; }
+      .desc { fill: #8b96a8; }
+      .step { fill: #88c0d0; }
+      .ok { fill: #a3be8c; }
+      .cur { fill: #eceff4; }
 
       /* Each line fades in at its moment and holds until the loop resets. */
       .l { opacity: 0; }
@@ -48,10 +48,10 @@
   <rect class="win" x="1" y="1" width="758" height="398" rx="12"/>
   <rect class="bar" x="1" y="1" width="758" height="40" rx="12"/>
   <rect class="bar" x="1" y="24" width="758" height="17"/>
-  <circle cx="26" cy="21" r="6" fill="#ff5f56"/>
-  <circle cx="48" cy="21" r="6" fill="#ffbd2e"/>
-  <circle cx="70" cy="21" r="6" fill="#27c93f"/>
-  <text x="380" y="26" text-anchor="middle" class="txt" fill="#6e7681" font-size="13">loom — a package manager for AI skills</text>
+  <circle cx="26" cy="21" r="6" fill="#bf616a"/>
+  <circle cx="48" cy="21" r="6" fill="#ebcb8b"/>
+  <circle cx="70" cy="21" r="6" fill="#a3be8c"/>
+  <text x="380" y="26" text-anchor="middle" class="txt" fill="#6a7385" font-size="13">loom — a package manager for AI skills</text>
 
   <!-- content -->
   <g class="txt">

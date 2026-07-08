@@ -1,8 +1,9 @@
 /* ==========================================================================
    Loom — shared styles
-   A calm, developer-focused aesthetic. One accent (loom-thread amber),
-   hairline borders, generous whitespace, monospace for code + skill names.
-   Light + dark themes driven by [data-theme] on <html>.
+   A calm, developer-focused aesthetic on the Nord palette. One Frost-blue
+   accent, hairline borders, generous whitespace, monospace for code + names.
+   Light (Snow Storm) + dark (Polar Night) themes driven by [data-theme].
+   Nord reference: https://www.nordtheme.com
    ========================================================================== */
 
 /* ----- Design tokens ----------------------------------------------------- */
@@ -13,31 +14,31 @@
   --font-mono: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Monaco,
     Consolas, "Liberation Mono", monospace;
 
-  /* Neutral scale — light theme (default) */
-  --bg: #fbfaf8;
+  /* Neutral scale — Nord "Snow Storm" light theme (default) */
+  --bg: #eceff4; /* nord6 */
   --bg-elevated: #ffffff;
-  --bg-subtle: #f4f2ee;
-  --bg-code: #f6f4f0;
-  --text: #1c1a17;
-  --text-muted: #6b665d;
-  --text-faint: #97918684;
-  --border: #e7e3db;
-  --border-strong: #d8d3c8;
+  --bg-subtle: #e5e9f0; /* nord5 */
+  --bg-code: #e5e9f0; /* nord5 */
+  --text: #2e3440; /* nord0 */
+  --text-muted: #4c566a; /* nord3 */
+  --text-faint: #4c566a70;
+  --border: #d8dee9; /* nord4 */
+  --border-strong: #c7d0de;
 
-  /* Single confident accent — a woven-thread amber */
-  --accent: #b96a2e;
-  --accent-hover: #a55c25;
+  /* Single confident accent — Nord "Frost" blue (nord10, deepened for AA) */
+  --accent: #4c6d95;
+  --accent-hover: #3f5c7f;
   --accent-contrast: #ffffff;
-  --accent-soft: #f0e4d6;
-  --accent-ring: #b96a2e40;
+  --accent-soft: #dbe4f0;
+  --accent-ring: #4c6d9540;
 
   /* Radii + shadow */
   --radius-sm: 6px;
   --radius: 10px;
   --radius-lg: 16px;
-  --shadow-sm: 0 1px 2px #1c1a170d;
-  --shadow: 0 6px 24px -8px #1c1a1720;
-  --shadow-lg: 0 20px 50px -20px #1c1a1733;
+  --shadow-sm: 0 1px 2px #2e34400d;
+  --shadow: 0 6px 24px -8px #2e344022;
+  --shadow-lg: 0 20px 50px -20px #2e344033;
 
   /* Layout */
   --maxw: 1080px;
@@ -47,21 +48,23 @@
 }
 
 :root[data-theme="dark"] {
-  --bg: #131211;
-  --bg-elevated: #1b1a18;
-  --bg-subtle: #201e1b;
-  --bg-code: #201e1b;
-  --text: #ece8e1;
-  --text-muted: #a49e93;
-  --text-faint: #7a746980;
-  --border: #2c2a26;
-  --border-strong: #3a372f;
+  /* Nord "Polar Night" surfaces */
+  --bg: #2e3440; /* nord0 */
+  --bg-elevated: #3b4252; /* nord1 */
+  --bg-subtle: #434c5e; /* nord2 */
+  --bg-code: #272c36; /* below nord0 for code wells */
+  --text: #eceff4; /* nord6 */
+  --text-muted: #a7b0c0;
+  --text-faint: #8f9bb380;
+  --border: #3b4252; /* nord1 */
+  --border-strong: #4c566a; /* nord3 */
 
-  --accent: #e0975a;
-  --accent-hover: #eaa66c;
-  --accent-contrast: #1a1512;
-  --accent-soft: #2a2018;
-  --accent-ring: #e0975a3d;
+  /* Brighter Frost cyan reads better on the dark surfaces */
+  --accent: #88c0d0; /* nord8 */
+  --accent-hover: #8fbcbb; /* nord7 */
+  --accent-contrast: #2e3440; /* nord0 */
+  --accent-soft: #34404b;
+  --accent-ring: #88c0d03d;
 
   --shadow-sm: 0 1px 2px #00000040;
   --shadow: 0 6px 24px -8px #00000066;
@@ -409,7 +412,7 @@ pre {
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-lg);
-  background: #0d1117;
+  background: #2e3440;
 }
 
 .hero__stat {
