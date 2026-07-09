@@ -51,11 +51,19 @@ Pass any supported target triple; omit it to build for the host.
 
 ## Publishing to crates.io (optional)
 
-The crate metadata is complete, so publishing is a one-liner whenever you want
-`cargo install loom` to work:
+The crate is named **`loom_ai`**, not `loom` — that name belongs to an unrelated
+concurrency-testing library and cannot be reused. The binary it installs is still
+`loom`, because `[[bin]] name` is independent of the package name.
+
+The crate metadata is complete, so publishing is a one-liner:
 
 ```sh
-cargo publish
+cargo publish            # dry-run first: cargo publish --dry-run
 ```
 
-This is deliberately kept manual and out of the release workflow.
+Once published, `cargo install loom_ai` puts a `loom` binary on the user's `PATH`.
+Until then, the source route is `cargo install --git https://github.com/wess/loom`.
+
+Publishing is deliberately kept manual and out of the release workflow. Note that
+a crates.io release is **permanent** — versions can be yanked but never deleted,
+and the name can never be freed.

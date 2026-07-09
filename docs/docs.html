@@ -195,12 +195,14 @@ cargo install --path .</code></pre>
             </div>
 
             <div class="note note--warn">
-              <strong class="note__label">Not on crates.io</strong>
-              <code>cargo install loom</code> does <em>not</em> install this
-              tool. The <code>loom</code> name on crates.io belongs to an
-              unrelated concurrency-testing library with no binary, so the
-              command fails with
-              <code>there is nothing to install</code>. Use one of the routes
+              <strong class="note__label">Not <code>cargo install loom</code></strong>
+              That command does <em>not</em> install this tool. The
+              <code>loom</code> name on crates.io belongs to an unrelated
+              concurrency-testing library with no binary, so it fails with
+              <code>there is nothing to install</code>. This crate is named
+              <code>loom_ai</code> — once it is published,
+              <code>cargo install loom_ai</code> will put a <code>loom</code>
+              binary on your <code>PATH</code>. Until then, use one of the routes
               above.
             </div>
 
@@ -912,7 +914,7 @@ loom index --out docs/skills.json  # or name the destination</code></pre>
                   </tr>
                   <tr>
                     <td><code>there is nothing to install in `loom v0.7.2`</code></td>
-                    <td>You ran <code>cargo install loom</code> and got an unrelated crates.io library. See <a class="link" href="#install">Installation</a>.</td>
+                    <td>You ran <code>cargo install loom</code> and got an unrelated crates.io library. This crate is <code>loom_ai</code>. See <a class="link" href="#install">Installation</a>.</td>
                   </tr>
                 </tbody>
               </table>

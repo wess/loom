@@ -84,7 +84,9 @@ cargo install --path .
 
 > **`cargo install loom` does not install this tool.** The `loom` name on
 > crates.io belongs to an unrelated concurrency-testing library that ships no
-> binary, so the command fails with `there is nothing to install`.
+> binary, so the command fails with `there is nothing to install`. This crate is
+> named `loom_ai`; once it's published to crates.io, `cargo install loom_ai` will
+> put a `loom` binary on your `PATH`.
 
 You need `git` on your `PATH` (Loom shells out to it for git sources, exactly like
 Homebrew does). `loom publish --execute` additionally needs the GitHub CLI (`gh`).
@@ -331,7 +333,7 @@ before merge.
 | `'<name>' is not installed for agent '<id>'` | Nothing in the registry matches. `loom list` shows what's installed, and for which agent. |
 | `unknown agent '<id>'` | `--agent` isn't a key in `config.json`. `loom agents` lists the valid ids. |
 | `loom init is interactive and needs a terminal` | stdin isn't a TTY. Use `loom new` or `loom generate` in scripts. |
-| `there is nothing to install in 'loom v0.7.2'` | You ran `cargo install loom` and got an unrelated crates.io library. See [Install](#install). |
+| `there is nothing to install in 'loom v0.7.2'` | You ran `cargo install loom` and got an unrelated crates.io library. This crate is `loom_ai`. See [Install](#install). |
 
 Start with `loom doctor`, then `loom info <skill>` to see exactly which manifest
 Loom resolved and where it came from.
