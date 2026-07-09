@@ -40,6 +40,7 @@
         </a>
         <nav class="nav__links" aria-label="Primary">
           <a class="nav__link" data-page="browse.html" href="browse.html">Browse</a>
+          <a class="nav__link" data-page="tutorial.html" href="tutorial.html">Tutorial</a>
           <a class="nav__link" data-page="docs.html" href="docs.html">Docs</a>
           <a class="nav__link nav__link--hide-sm" href="https://github.com/wess/loom">GitHub</a>
           <button class="icon-btn theme-toggle" type="button" aria-label="Toggle color theme">
@@ -65,15 +66,15 @@
               for what your agents know how to do.
             </p>
             <div class="hero__cta">
-              <a class="btn btn--primary" href="browse.html">Browse skills</a>
-              <a class="btn btn--ghost" href="docs.html">Read the docs</a>
+              <a class="btn btn--primary" href="tutorial.html">Start the tutorial</a>
+              <a class="btn btn--ghost" href="browse.html">Browse skills</a>
             </div>
             <p class="hero__stat" id="skillCount" aria-live="polite"></p>
             <div class="cmd__stack">
               <div class="cmd">
                 <span class="cmd__prompt" aria-hidden="true">$</span>
-                <span class="cmd__text">cargo install loom</span>
-                <button class="copy-btn" type="button" data-copy="cargo install loom" aria-label="Copy to clipboard">
+                <span class="cmd__text">brew install wess/packages/loom</span>
+                <button class="copy-btn" type="button" data-copy="brew install wess/packages/loom" aria-label="Copy to clipboard">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>
                   <span class="copy-btn__label">Copy</span>
                 </button>
@@ -143,6 +144,9 @@
               <p>The skill is woven into your agent's skills folder — <code>~/.claude/skills</code> by default — ready to use.</p>
             </div>
           </div>
+          <div class="center-cta">
+            <a class="btn btn--primary" href="tutorial.html">Walk through it step by step →</a>
+          </div>
         </div>
       </section>
     </main>
@@ -153,6 +157,7 @@
         <span>Loom — the package manager for AI skills.</span>
         <nav class="footer__links" aria-label="Footer">
           <a href="browse.html">Browse</a>
+          <a href="tutorial.html">Tutorial</a>
           <a href="docs.html">Docs</a>
           <a href="https://github.com/wess/loom">GitHub</a>
         </nav>

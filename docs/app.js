@@ -94,12 +94,44 @@ function markActiveNav() {
   });
 }
 
+/* ----- Table of contents ------------------------------------------------- */
+// Highlight the section currently in view. The rootMargin collapses the
+// viewport to a band around its middle, so exactly one section is "current".
+function initToc() {
+  const links = Array.from(document.querySelectorAll(".toc a"));
+  if (!links.length || !("IntersectionObserver" in window)) return;
+
+  const linkFor = new Map();
+  const sections = [];
+  for (const link of links) {
+    const id = link.getAttribute("href").slice(1);
+    const section = document.getElementById(id);
+    if (!section) continue;
+    linkFor.set(section, link);
+    sections.push(section);
+  }
+  if (!sections.length) return;
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      for (const entry of entries) {
+        if (!entry.isIntersecting) continue;
+        links.forEach((l) => l.classList.remove("is-active"));
+        linkFor.get(entry.target).classList.add("is-active");
+      }
+    },
+    { rootMargin: "-40% 0px -55% 0px", threshold: 0 }
+  );
+  sections.forEach((s) => observer.observe(s));
+}
+
 /* ----- Boot -------------------------------------------------------------- */
 initTheme();
 
 document.addEventListener("DOMContentLoaded", () => {
   markActiveNav();
   wireCopyButtons();
+  initToc();
 
   const toggle = document.querySelector(".theme-toggle");
   if (toggle) toggle.addEventListener("click", toggleTheme);

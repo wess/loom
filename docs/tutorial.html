@@ -1,0 +1,896 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Tutorial — Loom</title>
+    <meta name="description" content="A hands-on Loom tutorial: install the CLI, install your first skill, author your own manifest, and publish it to the repository." />
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cg fill='none' stroke='%234c6d95' stroke-width='2'%3E%3Cpath d='M4 8h16M4 16h16M8 4v16M16 4v16'/%3E%3C/g%3E%3C/svg%3E" />
+    <script>
+      (function () {
+        try {
+          var t =
+            localStorage.getItem("loom-theme") ||
+            (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+          document.documentElement.setAttribute("data-theme", t);
+        } catch (e) {}
+      })();
+    </script>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+
+    <header class="nav">
+      <div class="nav__inner">
+        <a class="brand" href="index.html" aria-label="Loom home">
+          <svg class="brand__mark" viewBox="0 0 24 24" aria-hidden="true">
+            <g fill="none" stroke="currentColor" stroke-width="1.6" style="color: var(--accent)">
+              <path d="M4 8h16M4 16h16M8 4v16M16 4v16" />
+            </g>
+          </svg>
+          Loom
+        </a>
+        <nav class="nav__links" aria-label="Primary">
+          <a class="nav__link" data-page="browse.html" href="browse.html">Browse</a>
+          <a class="nav__link" data-page="tutorial.html" href="tutorial.html">Tutorial</a>
+          <a class="nav__link" data-page="docs.html" href="docs.html">Docs</a>
+          <a class="nav__link nav__link--hide-sm" href="https://github.com/wess/loom">GitHub</a>
+          <button class="icon-btn theme-toggle" type="button" aria-label="Toggle color theme">
+            <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+            <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+          </button>
+        </nav>
+      </div>
+    </header>
+
+    <main id="main" class="wrap">
+      <div class="docs">
+        <aside>
+          <nav class="toc" id="toc" aria-label="On this page">
+            <p class="toc__title">Tutorial</p>
+            <a href="#intro">Before you start</a>
+            <a href="#part1">1 · Install Loom</a>
+            <a href="#part2">2 · Sync the repository</a>
+            <a href="#part3">3 · Install your first skill</a>
+            <a href="#part4">4 · See what landed</a>
+            <a href="#part5">5 · Upgrade and remove</a>
+            <a href="#part6">6 · Work with other agents</a>
+            <a href="#part7">7 · Author your own skill</a>
+            <a href="#part8">8 · Publish it</a>
+            <a href="#part9">9 · Import a whole repo</a>
+            <a href="#recap">Recap</a>
+          </nav>
+        </aside>
+
+        <article class="doc-content">
+          <section id="intro">
+            <h1>Loom tutorial</h1>
+            <p class="lead">
+              Start with nothing installed. Finish with a skill running inside
+              your agent, a manifest you wrote yourself, and a pull request
+              opened against the repository. About 20 minutes end to end.
+            </p>
+            <p>
+              Every command below is real, and every block of output is what
+              Loom actually prints. Work through the parts in order — each one
+              builds on the last — or jump straight to
+              <a class="link" href="#part7">Part 7</a> if you only came to
+              author a skill.
+            </p>
+
+            <h3 id="prereqs">What you need</h3>
+            <ul>
+              <li>
+                <strong>A way to install a binary</strong> — Homebrew, the
+                install script, or a Rust toolchain from
+                <a class="link" href="https://rustup.rs">rustup.rs</a> if you
+                would rather build from source. Part 1 covers all three.
+              </li>
+              <li>
+                <strong><code>git</code> on your <code>PATH</code>.</strong>
+                Loom shells out to the system <code>git</code> to fetch skills,
+                exactly the way Homebrew does.
+              </li>
+              <li>
+                <strong>A network connection.</strong> <code>install</code>,
+                <code>update</code>, <code>test</code>, and
+                <code>generate</code> all reach out to the network.
+              </li>
+              <li>
+                <strong>The GitHub CLI (<code>gh</code>), for Part 8 only.</strong>
+                Publishing forks a repo and opens a pull request through
+                <code>gh</code>. Everything before Part 8 works without it.
+              </li>
+            </ul>
+
+            <h3 id="mentalmodel">The one idea to hold onto</h3>
+            <p>
+              A <strong>manifest</strong> is a recipe, not a payload. The file
+              <code>skills/pdf.yml</code> in the Loom repository contains no
+              PDF-handling instructions at all — it contains a URL, a git ref,
+              and a sub-directory. The skill itself lives in someone else's
+              repo, where its authors maintain it.
+            </p>
+            <div class="codeblock">
+              <pre class="code code--out"><code>skills/pdf.yml            loom install pdf           ~/.claude/skills/pdf/
+<b>the recipe</b>        ───▶   <b>fetch + verify</b>      ───▶   <b>the payload</b>
+name, source URL,         clone at the pinned         SKILL.md and its
+ref, subdir               ref, check the entry        helper files</code></pre>
+            </div>
+            <p>
+              Everything in this tutorial is a variation on that flow: reading
+              recipes, running them, writing one, and sharing it.
+            </p>
+          </section>
+
+          <section id="part1">
+            <h2><span class="part">Part 1</span> Install Loom</h2>
+            <p>
+              On macOS or Linux, Homebrew is the shortest path:
+            </p>
+            <div class="codeblock">
+              <button class="copy-btn" type="button" data-copy="brew install wess/packages/loom" aria-label="Copy code"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg></button>
+              <pre class="code"><code>brew install wess/packages/loom</code></pre>
+            </div>
+            <p>
+              No Homebrew? The install script downloads the right prebuilt binary
+              for your platform, checks its checksum, and puts it on your
+              <code>PATH</code>:
+            </p>
+            <div class="codeblock">
+              <button class="copy-btn" type="button" data-copy="curl -fsSL https://raw.githubusercontent.com/wess/loom/main/scripts/install.sh | sh" aria-label="Copy code"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg></button>
+              <pre class="code"><code>curl -fsSL https://raw.githubusercontent.com/wess/loom/main/scripts/install.sh | sh</code></pre>
+            </div>
+            <p>
+              Or build it yourself, which is what you want if you plan to hack on
+              Loom. This needs a Rust toolchain from
+              <a class="link" href="https://rustup.rs">rustup.rs</a>:
+            </p>
+            <div class="codeblock">
+              <button class="copy-btn" type="button" data-copy="cargo install --git https://github.com/wess/loom" aria-label="Copy code"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg></button>
+              <pre class="code"><code>cargo install --git https://github.com/wess/loom</code></pre>
+            </div>
+            <p>
+              The
+              <a class="link" href="docs.html#install">documentation</a> also
+              lists the prebuilt tarballs, if you would rather place the binary
+              by hand.
+            </p>
+
+            <div class="note note--warn">
+              <strong class="note__label">Not on crates.io</strong>
+              <code>cargo install loom</code> does <em>not</em> install this
+              tool. The <code>loom</code> name on crates.io belongs to an
+              unrelated concurrency-testing library, which has no binary to
+              install. Use one of the routes above.
+            </div>
+
+            <h3 id="verify">Verify the install</h3>
+            <p>
+              <code>loom doctor</code> is the fastest way to confirm the
+              environment is sane. It checks the four things that break most
+              often:
+            </p>
+            <div class="codeblock">
+              <button class="copy-btn" type="button" data-copy="loom --version&#10;loom doctor" aria-label="Copy code"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg></button>
+              <pre class="code"><code>loom --version
+loom doctor</code></pre>
+            </div>
+            <p class="code-label">output</p>
+            <div class="codeblock">
+              <pre class="code code--out"><code><span class="out-ok">✓</span> git available — git version 2.55.0
+<span class="out-ok">✓</span> loom home writable — /Users/you/.loom
+<span class="out-ok">✓</span> config loads — 3 agents configured
+<span class="out-err">✗</span> repo at /Users/you/skills — manifest directory not found
+
+<span class="out-warn">!</span> 1 issue(s) found</code></pre>
+            </div>
+            <p>
+              That last line is expected on a fresh install, and Part 2 fixes
+              it. Loom has not downloaded the manifest repository yet, so it is
+              looking for manifests in a <code>skills/</code> folder next to
+              wherever you happen to be standing.
+            </p>
+            <p>
+              While you are here, note where Loom keeps its own state. Every
+              file it owns lives under one prefix:
+            </p>
+            <div class="codeblock">
+              <pre class="code code--out"><code>~/.loom/
+  config.json     which agents exist and where their skills folders are
+  state.json      the registry of what you have installed, and where
+  cache/          repository clone, downloads, scratch build dirs</code></pre>
+            </div>
+            <p>
+              Point <code>LOOM_HOME</code> somewhere else to relocate all of it
+              at once. That is what the rest of this tutorial does not need, but
+              it is exactly how you would try Loom without touching your real
+              setup:
+            </p>
+            <div class="codeblock">
+              <button class="copy-btn" type="button" data-copy="LOOM_HOME=/tmp/loom-sandbox loom doctor" aria-label="Copy code"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg></button>
+              <pre class="code"><code>LOOM_HOME=/tmp/loom-sandbox loom doctor</code></pre>
+            </div>
+          </section>
+
+          <section id="part2">
+            <h2><span class="part">Part 2</span> Sync the repository</h2>
+            <p>
+              Loom searches a local copy of the manifest repository, so the
+              first real command you run is the one that fetches it:
+            </p>
+            <div class="codeblock">
+              <button class="copy-btn" type="button" data-copy="loom update" aria-label="Copy code"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg></button>
+              <pre class="code"><code>loom update</code></pre>
+            </div>
+            <p class="code-label">output</p>
+            <div class="codeblock">
+              <pre class="code code--out"><code><span class="out-step">==&gt;</span> <b>Cloning repository from https://github.com/wess/loom</b>
+<span class="out-ok">✓</span> Repository up to date</code></pre>
+            </div>
+            <p>
+              This clones the repository into
+              <code>~/.loom/cache/repo</code> and — because you have not
+              overridden it — writes the resulting
+              <code>~/.loom/cache/repo/skills</code> path into
+              <code>config.json</code> as your <code>repo_path</code>. Every
+              later <code>loom update</code> becomes a fast-forward
+              <code>git pull</code> instead of a fresh clone.
+            </p>
+
+            <div class="note note--warn">
+              <strong class="note__label">Run this first</strong>
+              Until <code>repo_path</code> is set, Loom looks for manifests in
+              <code>./skills</code> relative to your current directory. Run
+              <code>loom search</code> from your home folder before
+              <code>loom update</code> and you will get
+              <code>manifest directory not found</code>. That is the single most
+              common first-run confusion.
+            </div>
+
+            <p>Now <code>doctor</code> is clean:</p>
+            <div class="codeblock">
+              <pre class="code code--out"><code><span class="out-ok">✓</span> git available — git version 2.55.0
+<span class="out-ok">✓</span> loom home writable — /Users/you/.loom
+<span class="out-ok">✓</span> config loads — 3 agents configured
+<span class="out-ok">✓</span> repo at /Users/you/.loom/cache/repo/skills — 287 manifests
+
+<span class="out-ok">✓</span> everything looks good</code></pre>
+            </div>
+            <p>
+              Re-run <code>loom update</code> whenever you want the newest
+              manifests. It only refreshes the recipes — it never touches a
+              skill you already installed. That is <code>loom upgrade</code>'s
+              job, and you will meet it in Part 5.
+            </p>
+          </section>
+
+          <section id="part3">
+            <h2><span class="part">Part 3</span> Install your first skill</h2>
+            <p>
+              You will install <code>pdf</code>, a skill that teaches an agent
+              to read, fill, split, and generate PDF documents. Start by finding
+              it.
+            </p>
+
+            <h3 id="searching">Search</h3>
+            <div class="codeblock">
+              <button class="copy-btn" type="button" data-copy="loom search pdf" aria-label="Copy code"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg></button>
+              <pre class="code"><code>loom search pdf</code></pre>
+            </div>
+            <p class="code-label">output</p>
+            <div class="codeblock">
+              <pre class="code code--out"><code>NAME           VER    SOURCE         DESCRIPTION
+<b>pdf</b>            0.1.0  anthropics     Use this skill whenever the user wants…
+<b>canvas-design</b>  0.1.0  anthropics     Create beautiful visual art in .png and…
+<b>docx</b>           0.1.0  anthropics     Use this skill whenever the user wants…
+<b>markitdown</b>     0.1.0  K-Dense-AI     Convert files and office documents to…
+  tip: `loom info &lt;name&gt;` for full details</code></pre>
+            </div>
+            <p>
+              Results are ranked, not merely filtered. An exact name match
+              outweighs a name prefix, which outweighs a keyword hit, which
+              outweighs a mention buried in the description — so the skill you
+              meant is almost always the first row. The <code>SOURCE</code>
+              column is the org that publishes the skill, which is worth a
+              glance before you install anything.
+            </p>
+
+            <h3 id="inspecting">Inspect before you install</h3>
+            <p>
+              <code>loom info</code> prints the whole manifest, so you can see
+              precisely what will be fetched and from where:
+            </p>
+            <div class="codeblock">
+              <button class="copy-btn" type="button" data-copy="loom info pdf" aria-label="Copy code"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg></button>
+              <pre class="code"><code>loom info pdf</code></pre>
+            </div>
+            <p class="code-label">output</p>
+            <div class="codeblock">
+              <pre class="code code--out"><code><b>pdf</b> 0.1.0
+Use this skill whenever the user wants to do anything with PDF files…
+
+  homepage: https://github.com/anthropics/skills
+  authors: anthropics
+  agents: claude-code
+  source: Git https://github.com/anthropics/skills
+  subdir: skills/pdf
+  manifest: /Users/you/.loom/cache/repo/skills/pdf.yml</code></pre>
+            </div>
+            <p>
+              Read the <code>source</code> and <code>subdir</code> lines as the
+              answer to "what code am I about to put on my machine?" Loom will
+              clone that repository and copy that folder. Nothing else.
+            </p>
+
+            <h3 id="installing">Install</h3>
+            <div class="codeblock">
+              <button class="copy-btn" type="button" data-copy="loom install pdf" aria-label="Copy code"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg></button>
+              <pre class="code"><code>loom install pdf</code></pre>
+            </div>
+            <p class="code-label">output</p>
+            <div class="codeblock">
+              <pre class="code code--out"><code><span class="out-step">==&gt;</span> <b>Installing pdf 0.1.0 for Claude Code</b>
+<span class="out-ok">✓</span> Installed to /Users/you/.claude/skills/pdf</code></pre>
+            </div>
+            <p>Four things happened, in this order:</p>
+            <ol>
+              <li>
+                The manifest was <strong>validated</strong>. A manifest with a
+                hard error never gets as far as the network.
+              </li>
+              <li>
+                The source was <strong>fetched</strong> into a scratch directory
+                under <code>~/.loom/cache/build/</code> — a shallow
+                <code>git clone</code> at the pinned ref.
+              </li>
+              <li>
+                The <code>subdir</code> was <strong>copied</strong> into
+                <code>~/.claude/skills/pdf/</code>, and the
+                <code>entry</code> file (<code>SKILL.md</code>) was confirmed to
+                exist. A missing entry file fails the install.
+              </li>
+              <li>
+                The install was <strong>recorded</strong> in
+                <code>~/.loom/state.json</code>, which is how
+                <code>list</code>, <code>upgrade</code>, and
+                <code>remove</code> know it is there.
+              </li>
+            </ol>
+            <p>Confirm with <code>loom list</code>:</p>
+            <div class="codeblock">
+              <button class="copy-btn" type="button" data-copy="loom list" aria-label="Copy code"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg></button>
+              <pre class="code"><code>loom list</code></pre>
+            </div>
+            <p class="code-label">output</p>
+            <div class="codeblock">
+              <pre class="code code--out"><code><b>pdf</b>  0.1.0  [claude-code]</code></pre>
+            </div>
+
+            <div class="note">
+              <strong class="note__label">Installs are idempotent</strong>
+              Running <code>loom install pdf</code> again wipes
+              <code>~/.claude/skills/pdf/</code> and lays it down fresh. That
+              makes reinstalling a safe way to discard local edits — and a
+              reason not to hand-edit files inside an installed skill.
+            </div>
+          </section>
+
+          <section id="part4">
+            <h2><span class="part">Part 4</span> See what landed</h2>
+            <p>
+              Loom is done, but the interesting part is what your agent now
+              sees. Look inside the folder:
+            </p>
+            <div class="codeblock">
+              <button class="copy-btn" type="button" data-copy="ls ~/.claude/skills/pdf" aria-label="Copy code"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg></button>
+              <pre class="code"><code>ls ~/.claude/skills/pdf</code></pre>
+            </div>
+            <p class="code-label">output</p>
+            <div class="codeblock">
+              <pre class="code code--out"><code>forms.md    LICENSE.txt    reference.md    scripts    SKILL.md</code></pre>
+            </div>
+            <p>
+              <code>SKILL.md</code> is the entry file. Its YAML front matter
+              tells the agent what the skill is for and when to reach for it;
+              the body is the instructions. Everything beside it —
+              <code>forms.md</code>, <code>reference.md</code>, the
+              <code>scripts/</code> folder — is loaded on demand by the agent as
+              the skill directs.
+            </p>
+            <p>
+              Claude Code picks up skills from <code>~/.claude/skills</code>
+              at session start. Open a new session and ask it to do something
+              PDF-shaped; it will find the skill on its own. There is no
+              registration step and nothing to restart beyond the agent itself.
+            </p>
+            <div class="note">
+              <strong class="note__label">Nothing is hidden</strong>
+              An installed skill is a plain folder of plain files. If an agent
+              is not picking a skill up, <code>cat</code> the
+              <code>SKILL.md</code> and read its front matter — the
+              <code>description</code> field is what the agent matches against
+              when deciding whether the skill is relevant.
+            </div>
+          </section>
+
+          <section id="part5">
+            <h2><span class="part">Part 5</span> Upgrade and remove</h2>
+
+            <h3 id="upgrading">Upgrade</h3>
+            <p>
+              <code>loom update</code> refreshed the recipes. <code>loom
+              upgrade</code> acts on them: for every skill in your registry, it
+              compares the version you installed against the version the
+              repository now pins, and reinstalls the ones that moved.
+            </p>
+            <div class="codeblock">
+              <button class="copy-btn" type="button" data-copy="loom update&#10;loom upgrade" aria-label="Copy code"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg></button>
+              <pre class="code"><code>loom update     # refresh the manifests
+loom upgrade    # act on them</code></pre>
+            </div>
+            <p class="code-label">output</p>
+            <div class="codeblock">
+              <pre class="code code--out"><code>  pdf: up to date (0.1.0)
+<span class="out-step">==&gt;</span> <b>Upgrading docx 0.1.0 -&gt; 0.2.0 [claude-code]</b>
+<span class="out-ok">✓</span> 1 skill(s) upgraded</code></pre>
+            </div>
+            <p>
+              Narrow it to one skill or one agent when you do not want to move
+              everything at once:
+            </p>
+            <div class="codeblock">
+              <button class="copy-btn" type="button" data-copy="loom upgrade pdf&#10;loom upgrade --agent codex" aria-label="Copy code"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg></button>
+              <pre class="code"><code>loom upgrade pdf              # just this skill, every agent
+loom upgrade --agent codex    # every skill, just this agent</code></pre>
+            </div>
+            <div class="note note--warn">
+              <strong class="note__label">Version strings, not commits</strong>
+              Upgrade compares the manifest's <code>version</code> field against
+              what you installed. Many manifests pin a moving ref like
+              <code>main</code> while holding <code>version</code> steady — when
+              that upstream branch advances, the version string does not, so
+              <code>upgrade</code> reports "up to date". Force a refetch with
+              <code>loom install &lt;skill&gt;</code>, which always reinstalls.
+            </div>
+
+            <h3 id="removing">Remove</h3>
+            <div class="codeblock">
+              <button class="copy-btn" type="button" data-copy="loom remove pdf" aria-label="Copy code"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg></button>
+              <pre class="code"><code>loom remove pdf</code></pre>
+            </div>
+            <p class="code-label">output</p>
+            <div class="codeblock">
+              <pre class="code code--out"><code><span class="out-step">==&gt;</span> <b>Removing pdf from Claude Code</b>
+<span class="out-ok">✓</span> Removed /Users/you/.claude/skills/pdf</code></pre>
+            </div>
+            <p>
+              <code>uninstall</code> and <code>rm</code> are aliases for the same
+              command. Removal is driven by the registry: Loom deletes the exact
+              path it recorded at install time, so it will never wander into a
+              directory it did not create.
+            </p>
+          </section>
+
+          <section id="part6">
+            <h2><span class="part">Part 6</span> Work with other agents</h2>
+            <p>Ask Loom which agents it knows about:</p>
+            <div class="codeblock">
+              <button class="copy-btn" type="button" data-copy="loom agents" aria-label="Copy code"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg></button>
+              <pre class="code"><code>loom agents</code></pre>
+            </div>
+            <p class="code-label">output</p>
+            <div class="codeblock">
+              <pre class="code code--out"><code><span class="out-ok">*</span> <b>claude-code</b>  Claude Code
+    /Users/you/.claude/skills
+  <b>codex</b>  OpenAI Codex
+    /Users/you/.codex/skills
+  <b>cursor</b>  Cursor
+    /Users/you/.cursor/skills
+
+<span class="out-ok">*</span> = default agent</code></pre>
+            </div>
+            <p>
+              The same skill can live in several agents at once. Each install is
+              tracked separately, so you can upgrade or remove one without
+              disturbing the others:
+            </p>
+            <div class="codeblock">
+              <button class="copy-btn" type="button" data-copy="loom install pdf --agent codex&#10;loom install pdf --agent cursor&#10;loom list" aria-label="Copy code"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg></button>
+              <pre class="code"><code>loom install pdf --agent codex
+loom install pdf --agent cursor
+loom list</code></pre>
+            </div>
+            <p class="code-label">output</p>
+            <div class="codeblock">
+              <pre class="code code--out"><code><b>pdf</b>  0.1.0  [claude-code]
+<b>pdf</b>  0.1.0  [codex]
+<b>pdf</b>  0.1.0  [cursor]</code></pre>
+            </div>
+            <div class="note">
+              <strong class="note__label">Compatibility is advisory</strong>
+              A manifest's <code>compatibility</code> list documents which agents
+              the author tested. It does not restrict anything — the install
+              target comes from <code>--agent</code> or your configured
+              <code>default_agent</code>. Loom will happily install a
+              <code>claude-code</code> skill into Cursor if you ask it to.
+            </div>
+            <p>
+              To teach Loom about an agent it has never heard of, add it to
+              <code>~/.loom/config.json</code>. The id becomes a valid
+              <code>--agent</code> value immediately:
+            </p>
+            <div class="codeblock">
+              <button class="copy-btn" type="button" data-copy='"my-agent": { "label": "My Agent", "skills_dir": "~/.myagent/skills" }' aria-label="Copy code"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg></button>
+              <pre class="code"><code>{
+  "agents": {
+    "claude-code": { "label": "Claude Code", "skills_dir": "~/.claude/skills" },
+    "my-agent":    { "label": "My Agent",    "skills_dir": "~/.myagent/skills" }
+  },
+  "default_agent": "claude-code"
+}</code></pre>
+            </div>
+          </section>
+
+          <section id="part7">
+            <h2><span class="part">Part 7</span> Author your own skill</h2>
+            <p>
+              Time to build something. You are going to write a small skill,
+              push it to your own repo, and describe it with a manifest that
+              Loom can install.
+            </p>
+
+            <h3 id="write-skill">Write the skill</h3>
+            <p>
+              A skill is a folder with a <code>SKILL.md</code> at its root. The
+              YAML front matter is what an agent reads when deciding whether the
+              skill applies; the body is what it reads once it decides.
+            </p>
+            <div class="codeblock">
+              <button class="copy-btn" type="button" data-copy="mkdir -p my-skills/changelog&#10;cd my-skills" aria-label="Copy code"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg></button>
+              <pre class="code"><code>mkdir -p my-skills/changelog
+cd my-skills</code></pre>
+            </div>
+            <p class="code-label">changelog/SKILL.md</p>
+            <div class="codeblock">
+              <pre class="code"><code>---
+name: changelog
+description: &gt;-
+  Write and maintain a CHANGELOG.md that follows Keep a Changelog.
+  Use when the user asks to add a changelog entry, cut a release,
+  or reorganize release notes.
+keywords: [changelog, releases, semver]
+---
+
+# Changelog
+
+## Adding an entry
+
+Group entries under `Added`, `Changed`, `Deprecated`, `Removed`,
+`Fixed`, and `Security`. New work goes under an `## [Unreleased]`
+heading until it ships.
+
+## Cutting a release
+
+Rename `[Unreleased]` to the version and date, then open a fresh
+`[Unreleased]` block above it.</code></pre>
+            </div>
+            <p>
+              Commit that, push it to GitHub, and tag it. The tag is what your
+              manifest will pin, and pinning is what makes an install
+              reproducible:
+            </p>
+            <div class="codeblock">
+              <button class="copy-btn" type="button" data-copy="git init &amp;&amp; git add . &amp;&amp; git commit -m 'Add changelog skill'&#10;git tag v0.1.0&#10;git remote add origin https://github.com/you/my-skills&#10;git push -u origin main --tags" aria-label="Copy code"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg></button>
+              <pre class="code"><code>git init &amp;&amp; git add . &amp;&amp; git commit -m 'Add changelog skill'
+git tag v0.1.0
+git remote add origin https://github.com/you/my-skills
+git push -u origin main --tags</code></pre>
+            </div>
+
+            <h3 id="author-manifest">Author the manifest</h3>
+            <p>
+              <code>loom init</code> walks you through every field, validating
+              as you type, and can pre-fill its answers by inspecting the repo
+              you just pushed:
+            </p>
+            <div class="codeblock">
+              <button class="copy-btn" type="button" data-copy="loom init --url https://github.com/you/my-skills --ref v0.1.0 --out ." aria-label="Copy code"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg></button>
+              <pre class="code"><code>loom init --url https://github.com/you/my-skills --ref v0.1.0 --out .</code></pre>
+            </div>
+            <p>
+              It reads your <code>SKILL.md</code> front matter for the name,
+              description, and keywords; sniffs your <code>LICENSE</code> file
+              for an SPDX id; and derives the author from the repo owner. Press
+              <kbd>Enter</kbd> to accept each default. At the end it offers to
+              test-fetch the manifest immediately.
+            </p>
+            <p>
+              <code>--out .</code> writes the manifest into the current
+              directory. Without it, both <code>loom init</code> and
+              <code>loom new</code> write into your configured repository folder
+              — after <code>loom update</code>, that is the synced clone in
+              <code>~/.loom/cache/</code>, where a later <code>update</code>
+              could overwrite it.
+            </p>
+            <div class="note note--warn">
+              <strong class="note__label">Needs a terminal</strong>
+              <code>loom init</code> is interactive and refuses to run when
+              stdin is not a TTY. In a script or a CI job, reach for
+              <code>loom new &lt;name&gt;</code> or
+              <code>loom generate &lt;url&gt;</code> instead.
+            </div>
+            <p>
+              Prefer to write YAML by hand? <code>loom new</code> drops a bare
+              template and gets out of your way:
+            </p>
+            <div class="codeblock">
+              <button class="copy-btn" type="button" data-copy="loom new changelog --out ." aria-label="Copy code"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg></button>
+              <pre class="code"><code>loom new changelog --out .</code></pre>
+            </div>
+            <p>Either way, you end up with something like this:</p>
+            <p class="code-label">changelog.yml</p>
+            <div class="codeblock">
+              <button class="copy-btn" type="button" data-copy="name: changelog&#10;version: 0.1.0&#10;description: Write and maintain a CHANGELOG.md that follows Keep a Changelog.&#10;homepage: https://github.com/you/my-skills&#10;license: MIT&#10;authors:&#10;  - You &lt;you@example.com&gt;&#10;keywords: [changelog, releases, semver]&#10;compatibility: [claude-code]&#10;source:&#10;  type: git&#10;  url: https://github.com/you/my-skills&#10;  ref: v0.1.0&#10;  subdir: changelog&#10;install:&#10;  entry: SKILL.md&#10;  files: []" aria-label="Copy code"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg></button>
+              <pre class="code"><code>name: changelog
+version: 0.1.0
+description: Write and maintain a CHANGELOG.md that follows Keep a Changelog.
+homepage: https://github.com/you/my-skills
+license: MIT
+authors:
+  - You &lt;you@example.com&gt;
+keywords: [changelog, releases, semver]
+compatibility: [claude-code]
+source:
+  type: git
+  url: https://github.com/you/my-skills
+  ref: v0.1.0        # the tag you pushed
+  subdir: changelog  # the folder holding SKILL.md
+install:
+  entry: SKILL.md
+  files: []</code></pre>
+            </div>
+            <p>
+              The two fields that decide whether the install works are
+              <code>source.url</code> and <code>source.subdir</code>. Together
+              they must point at the directory that contains your
+              <code>SKILL.md</code>. Get one wrong and the next step tells you.
+            </p>
+
+            <h3 id="lint-test">Lint, then test</h3>
+            <p>
+              <code>loom lint</code> is offline and instant. It separates
+              <strong>errors</strong>, which make a manifest uninstallable, from
+              <strong>warnings</strong>, which are quality nits that never block
+              anything:
+            </p>
+            <div class="codeblock">
+              <button class="copy-btn" type="button" data-copy="loom lint changelog.yml" aria-label="Copy code"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg></button>
+              <pre class="code"><code>loom lint changelog.yml</code></pre>
+            </div>
+            <p>
+              Give it a path and it lints that one file. Omit the path and it
+              lints every manifest in the repository Loom is configured to read
+              — which, once you have run <code>loom update</code>, is the
+              synced copy under <code>~/.loom/cache/repo/skills</code>, not
+              whatever folder you are standing in.
+            </p>
+            <p class="code-label">output — a manifest with a nit and a blocker</p>
+            <div class="codeblock">
+              <pre class="code code--out"><code><span class="out-err">✗</span> <b>changelog.yml</b>
+    <span class="out-err">error</span> homepage should be an http(s) url
+    <span class="out-warn">warn</span> no authors listed
+<span class="out-err">error:</span> manifest has errors</code></pre>
+            </div>
+            <p>
+              Fix the errors and it goes green. Then prove the manifest actually
+              resolves against the network. <code>loom test</code> fetches the
+              payload into a scratch directory, confirms the entry file is
+              really there, and throws it all away — your agents' skills folders
+              are never touched:
+            </p>
+            <div class="codeblock">
+              <button class="copy-btn" type="button" data-copy="loom test changelog.yml" aria-label="Copy code"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg></button>
+              <pre class="code"><code>loom test changelog.yml</code></pre>
+            </div>
+            <p class="code-label">output</p>
+            <div class="codeblock">
+              <pre class="code code--out"><code><span class="out-step">==&gt;</span> <b>Testing changelog 0.1.0</b>
+  fetched: 1 files
+  entry: SKILL.md
+<span class="out-ok">✓</span> manifest resolves and entry file is present</code></pre>
+            </div>
+            <p>
+              If <code>subdir</code> is wrong you get
+              <code>source subdir not found</code>. If the folder exists but has
+              no <code>SKILL.md</code> you get
+              <code>entry file 'SKILL.md' not present in source</code>. Both
+              point straight at the field to fix.
+            </p>
+            <div class="note note--success">
+              <strong class="note__label">Try it locally</strong>
+              A manifest path works anywhere a skill name does. Install your
+              draft before publishing it:
+              <code>loom install ./changelog.yml</code>. Note that this is a
+              <em>path</em> — Loom does not fetch a manifest from a URL.
+            </div>
+          </section>
+
+          <section id="part8">
+            <h2><span class="part">Part 8</span> Publish it</h2>
+            <p>
+              Sharing a skill means adding your manifest to the repository's
+              <code>skills/</code> folder. Your skill payload stays in your repo,
+              under your control — only the recipe is contributed.
+            </p>
+            <p>
+              <code>loom publish</code> automates the fork-branch-commit-PR
+              dance through the GitHub CLI. It <strong>defaults to a dry
+              run</strong>, so you can always look before you leap:
+            </p>
+            <div class="codeblock">
+              <button class="copy-btn" type="button" data-copy="loom publish changelog.yml" aria-label="Copy code"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg></button>
+              <pre class="code"><code>loom publish changelog.yml</code></pre>
+            </div>
+            <p class="code-label">output</p>
+            <div class="codeblock">
+              <pre class="code code--out"><code><span class="out-step">==&gt;</span> <b>Publishing changelog 0.1.0 to wess/loom</b>
+  → fork wess/loom to your account (if needed)
+  → clone your fork and branch loom/changelog
+  → copy changelog.yml to skills/changelog.yml
+  → commit "Add changelog 0.1.0" and push
+  → open a PR into wess/loom
+
+<span class="out-warn">warning:</span> dry run — nothing was changed. re-run with --execute to open the PR.</code></pre>
+            </div>
+            <p>
+              Happy with the plan? Authenticate <code>gh</code> once, then run it
+              for real:
+            </p>
+            <div class="codeblock">
+              <button class="copy-btn" type="button" data-copy="gh auth login&#10;loom publish changelog.yml --execute" aria-label="Copy code"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg></button>
+              <pre class="code"><code>gh auth login
+loom publish changelog.yml --execute</code></pre>
+            </div>
+            <p>
+              Publishing re-validates the manifest first — a manifest with a hard
+              error can never reach a pull request. Target a different repository
+              with <code>--repo</code> if you run your own collection of skills.
+            </p>
+            <p>
+              Once the PR merges, a CI job rebuilds
+              <code>docs/skills.json</code> and commits it back, so your skill
+              appears on the <a class="link" href="browse.html">Browse</a> page
+              without you lifting a finger. From that moment anyone can run:
+            </p>
+            <div class="codeblock">
+              <button class="copy-btn" type="button" data-copy="loom update &amp;&amp; loom install changelog" aria-label="Copy code"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg></button>
+              <pre class="code"><code>loom update &amp;&amp; loom install changelog</code></pre>
+            </div>
+            <div class="note">
+              <strong class="note__label">No <code>gh</code>? No problem</strong>
+              Publishing is a convenience, not a requirement. Fork the repo, copy
+              your <code>.yml</code> into <code>skills/</code>, and open the pull
+              request by hand. The result is identical.
+            </div>
+          </section>
+
+          <section id="part9">
+            <h2><span class="part">Part 9</span> Import a whole repo</h2>
+            <p>
+              Writing manifests one at a time is fine for one skill and tedious
+              for twenty. <code>loom generate</code> clones a repository, finds
+              every folder containing a <code>SKILL.md</code>, and drafts a
+              manifest for each:
+            </p>
+            <div class="codeblock">
+              <button class="copy-btn" type="button" data-copy="loom generate https://github.com/you/my-skills --ref v0.1.0" aria-label="Copy code"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg></button>
+              <pre class="code"><code>loom generate https://github.com/you/my-skills --ref v0.1.0</code></pre>
+            </div>
+            <p>
+              With no <code>--out</code> it prints the YAML to stdout so you can
+              read it before anything touches your disk. Pass a directory to
+              write the files:
+            </p>
+            <div class="codeblock">
+              <button class="copy-btn" type="button" data-copy="loom generate https://github.com/you/my-skills --ref v0.1.0 --out skills/&#10;loom lint skills/changelog.yml" aria-label="Copy code"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg></button>
+              <pre class="code"><code>loom generate https://github.com/you/my-skills --ref v0.1.0 --out skills/
+loom lint skills/changelog.yml    # then lint each draft</code></pre>
+            </div>
+            <p class="code-label">output</p>
+            <div class="codeblock">
+              <pre class="code code--out"><code><span class="out-step">==&gt;</span> <b>Inspecting https://github.com/you/my-skills</b>
+<span class="out-ok">✓</span> Discovered 3 skill(s)
+  wrote: skills/changelog.yml
+  wrote: skills/lint.yml
+  wrote: skills/release.yml
+  next: review each manifest, then `loom lint`</code></pre>
+            </div>
+            <p>
+              Generation infers as much as it can: the name, description, and
+              keywords come from each <code>SKILL.md</code>'s front matter, the
+              license from your <code>LICENSE</code> file, and the author from
+              the repo owner. A semver-looking <code>--ref</code> such as
+              <code>v1.2.0</code> becomes the <code>version</code>; a branch name
+              such as <code>main</code> falls back to <code>0.1.0</code>.
+            </p>
+            <p>
+              These are drafts, not finished work. Read every one before you
+              publish it — the description that reads well inside a
+              <code>SKILL.md</code> is often too long for a search result.
+              <code>create</code> is an alias, if that verb suits you better.
+            </p>
+          </section>
+
+          <section id="recap">
+            <h2>Recap</h2>
+            <p>The whole tutorial, as a single sequence:</p>
+            <div class="codeblock">
+              <button class="copy-btn" type="button" data-copy="brew install wess/packages/loom&#10;loom doctor&#10;loom update&#10;loom search pdf&#10;loom info pdf&#10;loom install pdf&#10;loom list&#10;loom upgrade&#10;loom remove pdf&#10;loom init --url https://github.com/you/my-skills --ref v0.1.0 --out .&#10;loom lint changelog.yml&#10;loom test changelog.yml&#10;loom publish changelog.yml --execute" aria-label="Copy code"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg></button>
+              <pre class="code"><code># set up
+brew install wess/packages/loom
+loom doctor
+loom update
+
+# consume
+loom search pdf
+loom info pdf
+loom install pdf
+loom list
+loom upgrade
+loom remove pdf
+
+# author
+loom init --url https://github.com/you/my-skills --ref v0.1.0 --out .
+loom lint changelog.yml
+loom test changelog.yml
+loom publish changelog.yml --execute</code></pre>
+            </div>
+
+            <h3 id="next">Where to next</h3>
+            <div class="linkgrid">
+              <a class="linkcard" href="docs.html#cli">
+                <h3>CLI reference</h3>
+                <p>Every command, flag, and alias in one table.</p>
+              </a>
+              <a class="linkcard" href="docs.html#manifest">
+                <h3>Manifest format</h3>
+                <p>Every field, what it does, and when it is required.</p>
+              </a>
+              <a class="linkcard" href="docs.html#troubleshooting">
+                <h3>Troubleshooting</h3>
+                <p>The errors you will hit, and what each one means.</p>
+              </a>
+              <a class="linkcard" href="browse.html">
+                <h3>Browse skills</h3>
+                <p>Search everything the repository has to offer.</p>
+              </a>
+            </div>
+
+            <div class="pager">
+              <a href="docs.html" class="pager__next">
+                <span>Next</span>
+                <strong>Documentation →</strong>
+              </a>
+            </div>
+          </section>
+        </article>
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="wrap footer__inner">
+        <span>Loom — the package manager for AI skills.</span>
+        <nav class="footer__links" aria-label="Footer">
+          <a href="index.html">Home</a>
+          <a href="browse.html">Browse</a>
+          <a href="docs.html">Docs</a>
+          <a href="https://github.com/wess/loom">GitHub</a>
+        </nav>
+      </div>
+    </footer>
+
+    <script src="app.js"></script>
+  </body>
+</html>
