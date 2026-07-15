@@ -2,7 +2,7 @@
 # `loom` is taken on crates.io by an unrelated concurrency-testing library, so
 # the crate is published as `loom_ai`. The binary it installs is still `loom`.
 name = "loom_ai"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2024"
 description = "A package manager for AI skills (Claude Code, Codex, and friends)."
 license = "MIT"
@@ -15,6 +15,13 @@ categories = ["command-line-utilities", "development-tools"]
 [[bin]]
 name = "loom"
 path = "src/main.rs"
+
+# Release archives are loom-<version>-<triple>.tar.gz with the binary inside a
+# loom-<version>-<triple>/ directory (see scripts/package.sh).
+[package.metadata.binstall]
+pkg-url = "{ repo }/releases/download/v{ version }/loom-{ version }-{ target }{ archive-suffix }"
+pkg-fmt = "tgz"
+bin-dir = "loom-{ version }-{ target }/{ bin }{ binary-ext }"
 
 [dependencies]
 anyhow = "1.0.103"

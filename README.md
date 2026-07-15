@@ -69,6 +69,16 @@ Grab a `.tar.gz` for your platform from the
 macOS and Linux on both `x86_64` and `aarch64` — then extract `loom` onto your
 `PATH`.
 
+### Cargo
+
+The crate is published as [`loom-skills`](https://crates.io/crates/loom-skills)
+(the bare `loom` name was taken); either way the installed binary is `loom`:
+
+```sh
+cargo install loom-skills          # builds from source
+cargo binstall loom-skills         # downloads the prebuilt release binary
+```
+
 ### From source
 
 Needs a Rust toolchain — grab one from [rustup.rs](https://rustup.rs).
