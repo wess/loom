@@ -384,3 +384,5 @@ src/
 ## License
 
 MIT.
+
+♥ [Sponsor this project](https://github.com/sponsors/wess)
